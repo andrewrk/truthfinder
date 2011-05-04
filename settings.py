@@ -19,13 +19,13 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
         # Or path to database file if using sqlite3.
-        'NAME': 'db',                      
+        'NAME': 'truthfinder',                      
         # Not used with sqlite3.
-        'USER': '',     
+        'USER': 'truthfinder',     
         # Not used with sqlite3.
-        'PASSWORD': '', 
+        'PASSWORD': 'dev', 
         # Set to empty string for localhost. Not used with sqlite3.
         'HOST': '',     
         # Set to empty string for default. Not used with sqlite3.
@@ -113,7 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'truthfinder.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     absolute('templates'),

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+LIVE_CODE="/home/andy/truthfinder"
+
+set -e
+
+cd $LIVE_CODE
+
+echo "Checking python module dependencies..."
+MISSING=$(python deps.py)
+if [ -n "$MISSING" ]; then
+    echo "FAILURE: missing dependencies on the server:";
+    echo "$MISSING";
+    exit 1;
+fi
+
+echo
+echo "==== DEPLOYING ===="
+
+cd $LIVE_CODE
+
+# turn off server while we update code
+echo "Stopping server..."
+sudo -u root /etc/init.d/apache2 stop
+
+# update code
+echo "Updating code..."
+git pull
+
+# migrate database
+echo "Migrating database..."
+python manage.py migrate
+
+# turn server back on
+echo "Starting server..."
+sudo -u root /etc/init.d/apache2 start
+
+echo
+echo "===== SUCCESS ====="
+
