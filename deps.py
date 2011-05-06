@@ -6,13 +6,6 @@ setup_environ(settings)
 """
 this file checks to make sure python dependencies are installed.
 it outpus a space separated list of missing dependencies.
-
- * python (the minimum version)
- * django - http://www.djangoproject.com/
- * south - http://south.aeracode.org/
-   - A good database system like postgresql or mysql so that the migration
-     stuff can work. (sqlite3 will not work)
- * psycopg2
 """
 
 def check_python():
@@ -24,7 +17,7 @@ def check_python():
         return False
 
 def check_django():
-    "django-1.3"
+    "django-1.3" # http://www.djangoproject.com/
     try:
         import django
         return django.get_version() == '1.3'
@@ -40,7 +33,9 @@ def check_psycopg():
         return False
 
 def check_south():
-    "south-0.7.3"
+    "south-0.7.3" # http://south.aeracode.org/
+    # requires a good database system like postgresql or mysql so that the
+    # migration stuff can work. (sqlite3 will not work)
     try:
         import south
         return south.__version__ == '0.7.3'
