@@ -3,8 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Truth Finder</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+    {% block extra_head %}{% endblock %}
   </head>
-  <body>
+  <body{% block bodytags %}{% endblock %}>
     <div id="header">
       <div id="logo">
         <h3><a href="{% url home %}">Truth Finder</a></h3>

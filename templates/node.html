@@ -7,7 +7,7 @@
     <a href="{% url edit node.id %}">Edit</a>
     <a href="{% url delete node.id %}">Delete</a>
     <div class="node-content">
-      {{ node.content }}
+      {{ node.content|safe }}
     </div>
     <div class="pro">
       {% if node.pros %}

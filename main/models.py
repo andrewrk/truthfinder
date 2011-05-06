@@ -1,8 +1,9 @@
 from django.db import models
+from richtext.fields import AdminRichTextField
 
 class TruthNode(models.Model):
     title = models.CharField(max_length=200)
-    content = models.TextField(max_length=20000)
+    content = AdminRichTextField(max_length=20000)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
 

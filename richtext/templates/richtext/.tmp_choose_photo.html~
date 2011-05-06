@@ -1,0 +1,63 @@
+<html>
+<head>
+	<!-- Dependency -->  
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo/yahoo-min.js" ></script> 
+	<!-- Event source file --> 
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/event/event-min.js" ></script> 
+
+	<script type="text/javascript">
+		function selectPhoto(ev)
+		{
+			var target = YAHOO.util.Event.getTarget(ev);
+			//Check to see if we clicked on an image
+			if (target && target.tagName && (target.tagName.toLowerCase() == 'img'))
+			{
+				//generate the img url string based on choices.
+				url = "/media/photologue/photos/cache/";
+				imgPathArray = target.getAttribute('src').split("cache/");
+				filename = imgPathArray[1].split("_")[0];
+				url += filename;
+				url += "_";
+				url += document.getElementById("photo_sizes").value;
+				
+				extension = "." + imgPathArray[1].split(".")[1];
+				url += extension;
+				
+				//populate the url field with our new url (in the other window)
+				//call the function in the parent window that launched this popup.
+				window.opener.populateURL(url);
+	            
+	            window.close();
+			}
+		}
+		
+		//register listeners on the photos div
+		YAHOO.util.Event.addListener("photos", "click", selectPhoto)
+		
+	</script>
+</head>
+
+<body>
+	<h2>Choose Photo Size</h2>
+	<select id="photo_sizes" size={{photo_sizes.count}}>
+	{% for size in photo_sizes %}
+		<option value="{{size.name}}" {% ifequal size.name "display" %} selected="selected" {% endifequal %} >{{size.name}}</option>
+	{% endfor %}
+	</select>
+	
+	<h2>Choose Photo</h2>
+	<div id="photos">
+	{% for photo in photos %}
+		{{photo.get_absolute_url}}<br/>
+		<img src="{{photo.get_admin_thumbnail_url}}" alt="{{photo.title}}" /><br/><br/>
+	{% endfor %}
+	</div>
+	<br/>
+	<a href="/admin/photologue/photo/add/">Upload new Photo</a>
+
+</body>
+</html>
+
+
+
+

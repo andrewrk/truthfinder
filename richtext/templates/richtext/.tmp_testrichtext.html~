@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+		
+{% block content %}
+<h1>Test RichText</h1>
+{{form.as_p}}
+
+{{form.media}}
+
+{% endblock %}
+

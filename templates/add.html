@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
+{% block bodytags %}{{ block.super }} class="yui-skin-sam"{% endblock %}
+{% block extra_head %}
+  {{ block.super }}
+  {% include 'rich_text_support.html' %}
+  <style type="text/css">
+    .editor-hidden {
+      display: none;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>Add new truth</h1>
+  <h1>Edit Truth</h1>
   <form action="." method="post">
     {{ form.as_p }}
-    <input type="submit" value="Add" />
+    <input type="submit" value="Save" />
   </form>
 {% endblock %}
