@@ -28,7 +28,7 @@ def add_node(request):
             node.content = form.cleaned_data.get('content')
             node.save()
 
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('node', args=[node.id]))
     else:
         form = CreateNodeForm()
 
@@ -36,7 +36,23 @@ def add_node(request):
         context_instance=RequestContext(request))
 
 def edit_node(request, node_id):
-    pass
+    node = get_object_or_404(TruthNode, pk=int(node_id))
+    if request.method == 'POST':
+        form = CreateNodeForm(request.POST)
+        if form.is_valid():
+            node.title = form.cleaned_data.get('title')
+            node.content = form.cleaned_data.get('content')
+            node.save()
+
+            return HttpResponseRedirect(reverse('node', args=[node.id]))
+    else:
+        form = CreateNodeForm(initial={
+            'title': node.title,
+            'content': node.content,
+        })
+
+    return render_to_response('add.html', {'form': form}, 
+        context_instance=RequestContext(request))
 
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
