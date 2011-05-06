@@ -7,5 +7,9 @@ handlers:
 - url: /media
   static_dir: media
 
+- url: /admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
 - url: /.*
   script: main.py

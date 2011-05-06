@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="node">
+    <h1>{{ node.title }}</h1>
+    <a href="/node/{{ node.id }}/">Link</a>
+    <a href="/node/{{ node.id }}/edit/">Edit</a>
+    <a href="/node/{{ node.id }}/delete/">Delete</a>
+    <div class="node-content">
+      {{ node.content }}
+    </div>
+    <div class="pro">
+      {% if node.pros %}
+        {% for pro in node.pros %}
+          {% with pro as node %}
+            {% include 'expandable_node.html' %}
+          {% endwith %}
+        {% endfor %}
+      {% endif %}
+      <a href="/node/{{ node.id }}/pro/" class="add">Add Pro</a>
+    </div>
+    <div class="con">
+      <a href="/node/{{ node.id }}/con/" class="add">Add Con</a>
+    </div>
+  </div>
+{% endblock %}

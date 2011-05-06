@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Truth Finder</title>
- </head>
- <body>
-  {% block content %}{% endblock %} 
- </body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Truth Finder</title>
+  </head>
+  <body>
+    <div id="header">
+      <div id="logo">
+        <h3><a href="/">Truth Finder</a></h3>
+      </div>
+      <div id="account">
+        {% if user %}
+          {{ user.email }} <a href="{{ logout_url }}">Sign out</a>
+        {% else %}
+          <a href="{{ login_url }}">Sign in</a>
+        {% endif %}
+      </div>
+    </div>
+    {% block content %}{% endblock %} 
+  </body>
 </html>

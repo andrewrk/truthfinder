@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Truth Finder</h1>
-    <p>
-     Coming soon - a place to flesh out all the pros and cons of any alleged
-     truth.
-    </p>
-
+  <h1>Truth Finder</h1>
+  <a href="/add/">New Truth</a>
+  {% if nodes %}
+    {% for node in nodes %}
+      {% include 'expandable_node.html' %}
+    {% endfor %}
+  {% else %}
+    <p>Nothing in database yet!</p>
+  {% endif %}
 {% endblock %}
