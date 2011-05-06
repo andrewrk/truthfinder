@@ -3,13 +3,30 @@ version: 1
 runtime: python
 api_version: 1
 
+builtins:
+- remote_api: on
+
+inbound_services:
+- warmup
+
 handlers:
+- url: /_ah/queue/deferred
+  script: djangoappengine/deferred/handler.py
+  login: admin
+
+- url: /_ah/stats/.*
+  script: djangoappengine/appstats/ui.py
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
 - url: /media
   static_dir: media
 
-- url: /admin/.*
+- url: /gadmin/.*
   script: $PYTHON_LIB/google/appengine/ext/admin
   login: admin
 
 - url: /.*
-  script: main.py
+  script: djangoappengine/main/main.py

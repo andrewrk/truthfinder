@@ -1,8 +1,9 @@
-{% extends 'base.html' %]
+{% extends 'base.html' %}
 
 {% block content %}
   <h1>Add new truth</h1>
-  <form action=".">
-    
+  <form action="." method="post">
+    {{ form.as_p }}
+    <input type="submit" value="Add" />
   </form>
 {% endblock %}

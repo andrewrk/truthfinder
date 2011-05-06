@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>Truth Finder</h1>
-  <a href="/add/">New Truth</a>
+  <a href="{% url add %}">New Truth</a>
   {% if nodes %}
     {% for node in nodes %}
       {% include 'expandable_node.html' %}

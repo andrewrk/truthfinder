@@ -3,9 +3,9 @@
 {% block content %}
   <div class="node">
     <h1>{{ node.title }}</h1>
-    <a href="/node/{{ node.id }}/">Link</a>
-    <a href="/node/{{ node.id }}/edit/">Edit</a>
-    <a href="/node/{{ node.id }}/delete/">Delete</a>
+    <a href="{% url node node.id %}">Link</a>
+    <a href="{% url edit node.id %}">Edit</a>
+    <a href="{% url delete node.id %}">Delete</a>
     <div class="node-content">
       {{ node.content }}
     </div>
@@ -17,10 +17,10 @@
           {% endwith %}
         {% endfor %}
       {% endif %}
-      <a href="/node/{{ node.id }}/pro/" class="add">Add Pro</a>
+      <a href="{% url pro node.id %}" class="add">Add Pro</a>
     </div>
     <div class="con">
-      <a href="/node/{{ node.id }}/con/" class="add">Add Con</a>
+      <a href="{% url con node.id %}" class="add">Add Con</a>
     </div>
   </div>
 {% endblock %}
