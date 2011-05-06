@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+  <h1>Deleting node</h1>
+  <p>
+    Are you sure you want to delete "{{ node.title }}"?
+  </p>
+  <form action="." method="post">
+    <input type="submit" value="Do it" />
+  </form>
+{% endblock %}

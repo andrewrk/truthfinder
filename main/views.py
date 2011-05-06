@@ -39,7 +39,13 @@ def edit_node(request, node_id):
     pass
 
 def delete_node(request, node_id):
-    pass
+    node = get_object_or_404(TruthNode, pk=int(node_id))
+    if request.method == 'POST':
+        node.delete()
+        return HttpResponseRedirect(reverse('home'))
+    else:
+        return render_to_response('delete.html', {'node': node}, 
+            context_instance=RequestContext(request))
 
 def add_pro(request, node_id):
     pass
