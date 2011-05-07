@@ -8,15 +8,19 @@ from django.http import HttpResponseRedirect
 from main.models import TruthNode, NodeRelationship
 from main.forms import CreateNodeForm
 
+ok_emails = set([
+    'superjoe30@gmail.com',
+    'tyler.heald@gmail.com',
+])
+
 def login_required(function):
     def decorated(*args, **kwargs):
         user = users.get_current_user() 
-        if user:
+        if user and user.email() in ok_emails:
             return function(*args, **kwargs)
         else:
             request = args[0]
             return HttpResponseRedirect(users.create_login_url(request.path))
-
     return decorated
 
 def home(request):

@@ -22,3 +22,4 @@ class NodeRelationship(models.Model):
         related_name="noderelationship_child_set")
     # child's relationship to parent
     relationship = models.IntegerField(choices=RELATIONSHIP_CHOICES)
+
