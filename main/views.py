@@ -2,12 +2,22 @@ from google.appengine.api import users
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from main.models import TruthNode, NodeRelationship
 from main.forms import CreateNodeForm
+
+def login_required(function):
+    def decorated(*args, **kwargs):
+        user = users.get_current_user() 
+        if user:
+            return function(*args, **kwargs)
+        else:
+            request = args[0]
+            return HttpResponseRedirect(users.create_login_url(request.path))
+
+    return decorated
 
 def home(request):
     nodes = [n for n in TruthNode.objects.all() if NodeRelationship.objects.filter(child_node__pk=n.pk).count() == 0]
@@ -39,6 +49,7 @@ def node(request, node_id):
     return render_to_response('node.html', context, 
         context_instance=RequestContext(request))
 
+@login_required
 def add_node(request):
     if request.method == 'POST':
         form = CreateNodeForm(request.POST)
@@ -55,6 +66,7 @@ def add_node(request):
     return render_to_response('add.html', {'form': form}, 
         context_instance=RequestContext(request))
 
+@login_required
 def edit_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':
@@ -74,6 +86,7 @@ def edit_node(request, node_id):
     return render_to_response('add.html', {'form': form}, 
         context_instance=RequestContext(request))
 
+@login_required
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':
@@ -111,8 +124,10 @@ def add_arg(request, node_id, arg_type):
     return render_to_response('arg.html', context,
         context_instance=RequestContext(request))
 
+@login_required
 def add_pro(request, node_id):
     return add_arg(request, node_id, NodeRelationship.PRO)
 
+@login_required
 def add_con(request, node_id):
     return add_arg(request, node_id, NodeRelationship.CON)
