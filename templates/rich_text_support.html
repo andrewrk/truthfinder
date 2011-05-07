@@ -1,14 +1,22 @@
-<!-- Skin CSS file -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
-<!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
-<!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
-<script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
-<script src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
-<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
-<!-- Source file for Rich Text Editor-->
-<script src="http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js"></script>
+{% extends 'base.html' %}
 
-<script type="text/javascript" src="{{ MEDIA_URL }}richtext/js/richtext.js"></script>
+{% block bodytags %}{{ block.super }} class="yui-skin-sam"{% endblock %}
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
+  <script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+  <script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+  <script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+  <script src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+  <script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+  <script src="http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js"></script>
+
+  <script type="text/javascript" src="{{ MEDIA_URL }}richtext/js/richtext.js"></script>
+
+  <style type="text/css">
+    .editor-hidden {
+      display: none;
+    }
+  </style>
+{% endblock %}
 

@@ -10,8 +10,8 @@
       {{ node.content|safe }}
     </div>
     <div class="pro">
-      {% if node.pros %}
-        {% for pro in node.pros %}
+      {% if pros %}
+        {% for pro in pros %}
           {% with pro as node %}
             {% include 'expandable_node.html' %}
           {% endwith %}
@@ -20,6 +20,13 @@
       <a href="{% url pro node.id %}" class="add">Add Pro</a>
     </div>
     <div class="con">
+      {% if cons %}
+        {% for con in cons %}
+          {% with con as node %}
+            {% include 'expandable_node.html' %}
+          {% endwith %}
+        {% endfor %}
+      {% endif %}
       <a href="{% url con node.id %}" class="add">Add Con</a>
     </div>
   </div>
