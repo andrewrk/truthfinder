@@ -1,0 +1,51 @@
+body {
+    font-family: Verdana, Arial, sans-serif;
+}
+
+#header {
+    border-bottom: 1px solid black;
+}
+
+#logo h3 {
+    margin: 0;
+    padding: 4px;
+}
+
+#logo h3 a {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+    text-decoration: none;
+    color: black;
+}
+
+#account {
+    float: right;
+}
+
+#content {
+    padding: 8px;
+}
+
+.node {
+    border: 1px solid black;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.node h2 {
+    margin: 0;
+    padding: 0;
+}
+
+.node h2 a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.pro {
+    background-color: #ddffdd;
+}
+
+.con {
+    background-color: #ffdddd;
+}

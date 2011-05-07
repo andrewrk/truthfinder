@@ -30,6 +30,10 @@ def home(request):
 
 def common_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
+
+    parent_rels = NodeRelationship.objects.filter(child_node__pk=node.pk)
+    parents = [rel.parent_node for rel in parent_rels]
+
     children_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
     pro_rels = children_rels.filter(relationship=NodeRelationship.PRO)
     con_rels = children_rels.filter(relationship=NodeRelationship.CON)
@@ -38,6 +42,7 @@ def common_node(request, node_id):
 
     return {
         'node': node,
+        'parents': parents,
         'pros': pros,
         'cons': cons,
     }
@@ -94,6 +99,8 @@ def edit_node(request, node_id):
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':
+        NodeRelationship.objects.filter(parent_node__pk=node.pk).delete()
+        NodeRelationship.objects.filter(child_node__pk=node.pk).delete()
         node.delete()
         return HttpResponseRedirect(reverse('home'))
     else:

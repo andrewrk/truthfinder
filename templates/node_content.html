@@ -1,7 +1,15 @@
-<a href="{% url node node.id %}">Link</a>
-<a href="{% url edit node.id %}">Edit</a>
-<a href="{% url delete node.id %}">Delete</a>
-<div class="node-content">
+<div class="tools">
+  <a href="{% url node node.id %}">Link</a>
+  <a href="{% url edit node.id %}">Edit</a>
+  <a href="{% url delete node.id %}">Delete</a>
+  {% if parents %}
+    Parents: 
+    {% for parent in parents %}
+      <a href="{% url node parent.id %}">{{ parent.title }}</a>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="html-content">
   {{ node.content|safe }}
 </div>
 <div class="pro">
@@ -12,7 +20,7 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url pro node.id %}" class="add">Add Pro</a>
+  <a href="{% url pro node.id %}" class="add">Add Pro Argument</a>
 </div>
 <div class="con">
   {% if cons %}
@@ -22,6 +30,6 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url con node.id %}" class="add">Add Con</a>
+  <a href="{% url con node.id %}" class="add">Add Con Argument</a>
 </div>
 

@@ -1,11 +1,14 @@
 function parseForDropdowns(dom) {
     $(dom).find('.node').each(function(index, item) {
-        var link = $(item).find('h2 a');
-        var node_content = $(item).find('.node-content');
-        var shown = false;
+        if ($(item).attr('data-master') === '1') {
+            return;
+        }
+        var link = $(item).find('h2 a').first();
+        var node_content = $(item).find('.node-content').first();
+        node_content.attr('data-shown', '0');
         $(link).click(function() {
-            if (! shown) {
-                shown = true;
+            if ($(node_content).attr('data-shown') === '0') {
+                $(node_content).attr('data-shown', '1');
                 $.get(
                     "/ajax/node/" + $(link).attr('data-nodeid') + "/",
                     function (data) {

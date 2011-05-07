@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Truth Finder</h1>
-  <a href="{% url add %}">New Truth</a>
+  <a href="{% url add %}">Add New Truth</a>
   {% if nodes %}
+    <h2>Truths in database:</h2>
     {% for node in nodes %}
       {% include 'expandable_node.html' %}
     {% endfor %}

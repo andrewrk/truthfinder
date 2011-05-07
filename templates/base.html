@@ -5,13 +5,12 @@
     <title>Truth Finder</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/node_dropdown.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
     {% block extra_head %}{% endblock %}
   </head>
   <body{% block bodytags %}{% endblock %}>
     <div id="header">
-      <div id="logo">
-        <h3><a href="{% url home %}">Truth Finder</a></h3>
-      </div>
       <div id="account">
         {% if user %}
           {{ user.email }} <a href="{{ logout_url }}">Sign out</a>
@@ -19,7 +18,12 @@
           <a href="{{ login_url }}">Sign in</a>
         {% endif %}
       </div>
+      <div id="logo">
+        <h3><a href="{% url home %}">Truth Finder</a></h3>
+      </div>
     </div>
-    {% block content %}{% endblock %} 
+    <div id="content">
+      {% block content %}{% endblock %} 
+    </div>
   </body>
 </html>
