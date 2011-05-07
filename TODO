@@ -1,0 +1,4 @@
+Release to Tyler
+* make auth work with @login_required
+* make a whitelist of editors 
+* clean up the css a little

@@ -14,7 +14,7 @@ def home(request):
     return render_to_response('home.html', {'nodes': nodes}, 
         context_instance=RequestContext(request))
 
-def node(request, node_id):
+def common_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     children_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
     pro_rels = children_rels.filter(relationship=NodeRelationship.PRO)
@@ -22,11 +22,20 @@ def node(request, node_id):
     pros = [rel.child_node for rel in pro_rels]
     cons = [rel.child_node for rel in con_rels]
 
-    context = {
+    return {
         'node': node,
         'pros': pros,
         'cons': cons,
     }
+    
+
+def ajax_node(request, node_id):
+    context = common_node(request, node_id)
+    return render_to_response('node_content.html', context, 
+        context_instance=RequestContext(request))
+
+def node(request, node_id):
+    context = common_node(request, node_id)
     return render_to_response('node.html', context, 
         context_instance=RequestContext(request))
 

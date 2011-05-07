@@ -3,31 +3,8 @@
 {% block content %}
   <div class="node">
     <h1>{{ node.title }}</h1>
-    <a href="{% url node node.id %}">Link</a>
-    <a href="{% url edit node.id %}">Edit</a>
-    <a href="{% url delete node.id %}">Delete</a>
     <div class="node-content">
-      {{ node.content|safe }}
-    </div>
-    <div class="pro">
-      {% if pros %}
-        {% for pro in pros %}
-          {% with pro as node %}
-            {% include 'expandable_node.html' %}
-          {% endwith %}
-        {% endfor %}
-      {% endif %}
-      <a href="{% url pro node.id %}" class="add">Add Pro</a>
-    </div>
-    <div class="con">
-      {% if cons %}
-        {% for con in cons %}
-          {% with con as node %}
-            {% include 'expandable_node.html' %}
-          {% endwith %}
-        {% endfor %}
-      {% endif %}
-      <a href="{% url con node.id %}" class="add">Add Con</a>
+      {% include 'node_content.html' %}
     </div>
   </div>
 {% endblock %}
