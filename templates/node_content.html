@@ -6,6 +6,7 @@
     Parents: 
     {% for parent in parents %}
       <a href="{% url node parent.id %}">{{ parent.title }}</a>
+      <a href="{% url unpin node.id parent.id %}">(Unpin)</a>
     {% endfor %}
   {% endif %}
 </div>

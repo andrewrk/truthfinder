@@ -96,6 +96,21 @@ def edit_node(request, node_id):
         context_instance=RequestContext(request))
 
 @login_required
+def unpin_node(request, child_node_id, parent_node_id):
+    child_node = get_object_or_404(TruthNode, pk=int(child_node_id))
+    parent_node = get_object_or_404(TruthNode, pk=int(parent_node_id))
+    relationship = NodeRelationship.objects.get(parent_node=parent_node, child_node=child_node)
+    relationship_text = dict(NodeRelationship.RELATIONSHIP_CHOICES)[relationship.relationship]
+    
+    if request.method == 'POST':
+        NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node).delete()
+        return HttpResponseRedirect(reverse('home'))
+    else:
+        return render_to_response('unpin.html', locals(),
+            context_instance=RequestContext(request))
+    
+
+@login_required
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':

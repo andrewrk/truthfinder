@@ -49,3 +49,7 @@ body {
 .con {
     background-color: #ffdddd;
 }
+
+#id_title {
+    width: 650px;
+}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Unpinning node - {{ block.super }}{% endblock %}
+
+{% block content %} 
+  <h1>Unpinning node</h1>
+  <p>
+    <em>{{ child_node.title }}</em> is a
+    <strong>{{ relationship_text }}</strong> of
+    <em>{{ parent_node.title }}</em>.
+  </p>
+  <form action="." method="post">
+    <input type="submit" value="Unpin it" />
+  </form>
+{% endblock %}
