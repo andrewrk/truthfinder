@@ -34,10 +34,14 @@ allowed_tags = [
 ]
 
 allowed_attrs = {
-    'a': ['href', 'title'],
-    'abbr': ['title'],
-    'acronym': ['title'],
+    'a': ['href', 'title', 'style'],
+    'abbr': ['title', 'style'],
+    'acronym': ['title', 'style'],
     'span': ['style'],
+    'img': ['src', 'width', 'height', 'alt', 'title', 'style'],
+    'div': ['style'],
+    'code': ['style'],
+    'pre': ['style'],
 }
 
 allowed_styles = [
@@ -58,7 +62,6 @@ class CreateNodeForm(forms.ModelForm):
 class NodeRelationshipForm(forms.ModelForm):
     class Meta:
         model = NodeRelationship
-
 
     def clean(self):
         parent_node = self.cleaned_data['parent_node']
