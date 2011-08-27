@@ -58,15 +58,13 @@ def ajax_node(request, node_id):
         context_instance=RequestContext(request))
 
 def ajax_search(request):
-    try:
-        # limit query to 10 words
-        words = request.GET.get('term').split()[:10]
-    except IndexError:
-        return json_response({'error': 'Bad request'})
+    query = request.GET.get('term')
 
-    nodes = TruthNode.objects
-    for word in words:
-        nodes = nodes.filter(title__startswith=word)
+    # perform search
+    nodes = TruthNode.objects.filter(title__startswith=query)
+
+    # limit to 15 results
+    nodes = nodes[:15]
 
     data = []
     for node in nodes:
