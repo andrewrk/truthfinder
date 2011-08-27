@@ -23,6 +23,7 @@ allowed_tags = [
     'sup',
     'sub',
     'table',
+    'tbody',
     'tr',
     'td',
     'img',
