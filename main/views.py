@@ -14,6 +14,7 @@ ok_emails = set([
     'superjoe30@gmail.com',
     'tyler.heald@gmail.com',
 ])
+home_page_id = 19023
 
 def login_required(function):
     def decorated(*args, **kwargs):
@@ -25,8 +26,13 @@ def login_required(function):
             return HttpResponseRedirect(users.create_login_url(request.path))
     return decorated
 
-def home(request):
+def orphans(request):
     nodes = [n for n in TruthNode.objects.all() if NodeRelationship.objects.filter(child_node__pk=n.pk).count() == 0]
+    return render_to_response('orphans.html', {'nodes': nodes}, 
+        context_instance=RequestContext(request))
+
+def home(request):
+    nodes = [rel.child_node for rel in NodeRelationship.objects.filter(parent_node__pk=home_page_id)]
     return render_to_response('home.html', {'nodes': nodes}, 
         context_instance=RequestContext(request))
 
@@ -80,6 +86,10 @@ def ajax_search(request):
     return json_response(data)
 
 def node(request, node_id):
+    # redirect to home page if home page is requested
+    if int(node_id) == home_page_id:
+        return HttpResponseRedirect('/')
+
     context = common_node(request, node_id)
     return render_to_response('node.html', context, 
         context_instance=RequestContext(request))
@@ -93,6 +103,12 @@ def add_node(request):
             node.title = form.cleaned_data.get('title')
             node.content = form.cleaned_data.get('content')
             node.save()
+
+            rel = NodeRelationship()
+            rel.parent_node = TruthNode.objects.get(pk=home_page_id)
+            rel.child_node = node
+            rel.relationship = NodeRelationship.PRO
+            rel.save()
 
             return HttpResponseRedirect(reverse('node', args=[node.id]))
     else:

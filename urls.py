@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'main.views.home', name='home'),
 
+    url(r'^orphans/$', 'main.views.orphans', name='orphans'),
     url(r'^add/$', 'main.views.add_node', name='add'),
     url(r'^node/(\d+)/$', 'main.views.node', name='node'),
     url(r'^ajax/node/(\d+)/$', 'main.views.ajax_node', name='ajax_node'),
