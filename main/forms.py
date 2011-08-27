@@ -19,6 +19,17 @@ allowed_tags = [
     'font',
     'span',
     'div',
+    'p',
+    'sup',
+    'sub',
+    'table',
+    'tr',
+    'td',
+    'img',
+    'pre',
+    'dl',
+    'dd',
+    'dt',
 ]
 
 allowed_attrs = {
