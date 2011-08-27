@@ -28,9 +28,9 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/admin
   login: admin
 
-- url: /favicon.ico
-  static_files: media/favicon.ico
-  upload: media/favicon.ico
+- url: /favicon\.ico
+  static_files: media/img/favicon.ico
+  upload: media/img/favicon\.ico
 
 - url: /.*
   script: djangoappengine/main/main.py
