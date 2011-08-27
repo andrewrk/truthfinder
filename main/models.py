@@ -11,10 +11,11 @@ class TruthNode(models.Model):
         return self.title
     
 class NodeRelationship(models.Model):
-    PRO, CON = range(2)
+    PRO, CON, PREMISE = range(3)
     RELATIONSHIP_CHOICES = (
         (PRO, u'Pro'),
         (CON, u'Con'),
+        (PREMISE, u'Premise'),
     )
     parent_node = models.ForeignKey(TruthNode,
         related_name="noderelationship_parent_set")

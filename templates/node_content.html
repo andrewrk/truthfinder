@@ -11,6 +11,16 @@
     {% endfor %}
   {% endif %}
 </div>
+<div class="premise">
+  {% if premises %}
+    {% for premise in premises %}
+      {% with premise as node %}
+        {% include 'expandable_node.html' %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+  <a href="{% url premise node.id %}" class="add">Add Premise</a>
+</div>
 <div class="html-content">
   {{ node.content|safe }}
 </div>

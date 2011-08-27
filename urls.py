@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^node/(\d+)/pin/$', 'main.views.pin_node', name='pin'),
     url(r'^node/(\d+)/pro/$', 'main.views.add_pro', name='pro'),
     url(r'^node/(\d+)/con/$', 'main.views.add_con', name='con'),
+    url(r'^node/(\d+)/premise/$', 'main.views.add_premise', name='premise'),
 )

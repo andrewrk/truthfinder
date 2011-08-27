@@ -39,14 +39,17 @@ def common_node(request, node_id):
     children_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
     pro_rels = children_rels.filter(relationship=NodeRelationship.PRO)
     con_rels = children_rels.filter(relationship=NodeRelationship.CON)
+    premise_rels = children_rels.filter(relationship=NodeRelationship.PREMISE)
     pros = [rel.child_node for rel in pro_rels]
     cons = [rel.child_node for rel in con_rels]
+    premises = [rel.child_node for rel in premise_rels]
 
     return {
         'node': node,
         'parents': parents,
         'pros': pros,
         'cons': cons,
+        'premises': premises,
     }
 
 def json_response(data):
@@ -186,6 +189,7 @@ def add_arg(request, node_id, arg_type):
     context = {
         'parent': parent,
         'arg_type': arg_type,
+        'arg_type_text': dict(NodeRelationship.RELATIONSHIP_CHOICES)[arg_type],
         'form': form,
     }
     return render_to_response('arg.html', context,
@@ -198,3 +202,7 @@ def add_pro(request, node_id):
 @login_required
 def add_con(request, node_id):
     return add_arg(request, node_id, NodeRelationship.CON)
+
+@login_required
+def add_premise(request, node_id):
+    return add_arg(request, node_id, NodeRelationship.PREMISE)

@@ -1,7 +1,7 @@
 {% extends 'rich_text_support.html' %}
 
 {% block content %}
-  <h1>Adding a {% if arg_type == 0 %}Pro{% else %}Con{% endif %} Argument</h1>
+  <h1>Adding a {{ arg_type_text }} Argument</h1>
   <form action="." method="post">
     {{ form.as_p }}
     <input type="submit" value="Save" />
