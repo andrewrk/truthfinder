@@ -2,6 +2,7 @@
   <a href="{% url node node.id %}">Link</a>
   <a href="{% url edit node.id %}">Edit</a>
   <a href="{% url delete node.id %}">Delete</a>
+  <a href="{% url pin node.id %}">Pin</a>
   {% if parents %}
     Parents: 
     {% for parent in parents %}

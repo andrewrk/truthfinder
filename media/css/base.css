@@ -53,3 +53,24 @@ body {
 #id_title {
     width: 650px;
 }
+
+input.nodesearch {
+    width: 650px;
+}
+
+form table {
+    border: none;
+    border-collapse: collapse;
+}
+
+form table td {
+    border: none;
+}
+
+td.label {
+    text-align: right;
+}
+
+input.nodeid {
+    width: 100px;
+}

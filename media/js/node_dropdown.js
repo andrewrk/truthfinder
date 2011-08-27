@@ -22,6 +22,26 @@ function parseForDropdowns(dom) {
     });
 }
 
+function parseForNodeSearch(dom) {
+    $(dom).find('input.nodesearch').each(function(index, item) {
+        var name = $(item).attr('id');
+        var hidden_id = name + '_hidden';
+
+        // insert a hidden input next to it with the node id
+        $(item).after('<input id="' + hidden_id +
+            '" type="text" name="' + name +  '" value="" class="nodeid" placeholder="Node ID" />');
+        
+        $(item).autocomplete({
+            source: "/ajax/search/",
+            minLength: 1,
+            select: function (event, ui) {
+                $('#' + hidden_id).val(ui.item.id);
+            }
+        });
+    });
+}
+
 $(document).ready(function() {
     parseForDropdowns(document);
+    parseForNodeSearch(document);
 });

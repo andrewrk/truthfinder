@@ -3,10 +3,12 @@ from google.appengine.api import users
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from main.models import TruthNode, NodeRelationship
-from main.forms import CreateNodeForm
+from main.forms import CreateNodeForm, NodeRelationshipForm
+
+import simplejson as json
 
 ok_emails = set([
     'superjoe30@gmail.com',
@@ -46,12 +48,35 @@ def common_node(request, node_id):
         'pros': pros,
         'cons': cons,
     }
-    
+
+def json_response(data):
+    return HttpResponse(json.dumps(data), mimetype="text/plain")
 
 def ajax_node(request, node_id):
     context = common_node(request, node_id)
     return render_to_response('node_content.html', context, 
         context_instance=RequestContext(request))
+
+def ajax_search(request):
+    try:
+        # limit query to 10 words
+        words = request.GET.get('term').split()[:10]
+    except IndexError:
+        return json_response({'error': 'Bad request'})
+
+    nodes = TruthNode.objects
+    for word in words:
+        nodes = nodes.filter(title__startswith=word)
+
+    data = []
+    for node in nodes:
+        data.append({
+            'id': node.id,
+            'label': node.title,
+            'value': node.title,
+        })
+
+    return json_response(data)
 
 def node(request, node_id):
     context = common_node(request, node_id)
@@ -99,8 +124,9 @@ def edit_node(request, node_id):
 def unpin_node(request, child_node_id, parent_node_id):
     child_node = get_object_or_404(TruthNode, pk=int(child_node_id))
     parent_node = get_object_or_404(TruthNode, pk=int(parent_node_id))
-    relationship = NodeRelationship.objects.get(parent_node=parent_node, child_node=child_node)
-    relationship_text = dict(NodeRelationship.RELATIONSHIP_CHOICES)[relationship.relationship]
+    relationships = NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node)
+    choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+    relationships_text = [choices[r.relationship] for r in relationships]
     
     if request.method == 'POST':
         NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node).delete()
@@ -109,6 +135,23 @@ def unpin_node(request, child_node_id, parent_node_id):
         return render_to_response('unpin.html', locals(),
             context_instance=RequestContext(request))
     
+@login_required
+def pin_node(request, node_id):
+    child_node = get_object_or_404(TruthNode, pk=int(node_id))
+    if request.method == 'POST':
+        form = NodeRelationshipForm(request.POST)
+        if form.is_valid():
+            relate = NodeRelationship()
+            relate.parent_node = form.cleaned_data.get('parent_node')
+            relate.child_node = form.cleaned_data.get('child_node')
+            relate.relationship = form.cleaned_data.get('relationship')
+            relate.save()
+
+            return HttpResponseRedirect(reverse("node", args=[relate.parent_node.id]))
+    else:
+        form = NodeRelationshipForm()
+    return render_to_response('pin.html', locals(),
+        context_instance=RequestContext(request))
 
 @login_required
 def delete_node(request, node_id):

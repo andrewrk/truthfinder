@@ -1,5 +1,5 @@
 from django import forms
-from main.models import TruthNode
+from main.models import TruthNode, NodeRelationship
 import bleach
 
 allowed_tags = [
@@ -53,3 +53,18 @@ class CreateNodeForm(forms.ModelForm):
         content = self.cleaned_data['content']
         return bleach.clean(content, tags=allowed_tags,
             attributes=allowed_attrs, styles=allowed_styles)
+
+class NodeRelationshipForm(forms.ModelForm):
+    class Meta:
+        model = NodeRelationship
+
+
+    def clean(self):
+        parent_node = self.cleaned_data['parent_node']
+        child_node = self.cleaned_data['child_node']
+        relationship = self.cleaned_data['relationship']
+
+        if NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node, relationship=relationship).count() > 0:
+            self._errors['parent_node'] = self.error_class(["This relationship already exists."])
+
+        return self.cleaned_data

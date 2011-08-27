@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Pinning node - {{ block.super }}{% endblock %}
+
+{% block content %} 
+  <h1>Pinning node</h1>
+  <form action="." method="post">
+    {{ form.non_field_errors }}
+    <table>
+      <tr>
+        <td class="label">
+          This truth:
+        </td>
+        <td>
+          <em>{{ child_node.title }}</em>
+          <input type="hidden" name="child_node" value="{{ child_node.id }}" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="id_relationship">Is a:</label>
+        </td>
+        <td>
+          {{ form.relationship.errors }}
+          {{ form.relationship }}
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="parent_node">Of:</label>
+        </td>
+        <td>
+          {{ form.parent_node.errors }}
+          <input type="text" id="parent_node" class="nodesearch" placeholder="Search names or type an ID" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label"></td>
+        <td>
+          <input type="submit" value="Pin" />
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}

@@ -2,7 +2,7 @@ from django.db import models
 from richtext.fields import AdminRichTextField
 
 class TruthNode(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, db_index=True)
     content = AdminRichTextField(max_length=20000)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
