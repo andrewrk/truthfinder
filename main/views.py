@@ -189,6 +189,39 @@ def unpin_node(request, child_node_id, parent_node_id, relationship_type):
             context_instance=RequestContext(request))
     
 @login_required
+def pin_existing(request, node_id, relationship_type):
+    parent_node = get_object_or_404(TruthNode, pk=int(node_id))
+    relationship_type = int(relationship_type)
+
+    if request.method == 'POST':
+        form = NodeRelationshipForm(request.POST)
+        if form.is_valid():
+            relate = NodeRelationship()
+            relate.parent_node = form.cleaned_data.get('parent_node')
+            relate.child_node = form.cleaned_data.get('child_node')
+            relate.relationship = form.cleaned_data.get('relationship')
+            relate.save()
+
+            change = ChangeNotification()
+            change.change_type = ChangeNotification.PIN
+            change.user = users.get_current_user().nickname()
+            change.node = relate.child_node
+            change.node_title = relate.child_node.title
+            change.pin_type = relate.relationship
+            change.parent_node = relate.parent_node
+            change.parent_node_title = relate.parent_node.title
+            change.save()
+
+            return HttpResponseRedirect(reverse("node", args=[relate.parent_node.id]))
+    else:
+        initial = {
+            'relationship': relationship_type,
+        }
+        form = NodeRelationshipForm(initial=initial)
+    return render_to_response('pin_existing.html', locals(),
+        context_instance=RequestContext(request))
+
+@login_required
 def pin_node(request, node_id):
     child_node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':

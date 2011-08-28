@@ -24,6 +24,7 @@
     {% endfor %}
   {% endif %}
   <a href="{% url premise node.id %}" class="add">Add New Premise</a>
+  <a href="{% url pin_existing node.id 2 %}" class="add">Pin Existing Premise</a>
 </div>
 <div class="html-content">
   {{ node.content|safe }}
@@ -37,6 +38,7 @@
     {% endfor %}
   {% endif %}
   <a href="{% url pro node.id %}" class="add">Add New Pro Argument</a>
+  <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing Pro Argument</a>
 </div>
 <div class="con">
   {% if cons %}
@@ -47,5 +49,6 @@
     {% endfor %}
   {% endif %}
   <a href="{% url con node.id %}" class="add">Add New Con Argument</a>
+  <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing Con Argument</a>
 </div>
 
