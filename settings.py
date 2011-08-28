@@ -61,6 +61,9 @@ TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
 ROOT_URLCONF = 'urls'
 
 try:
-    from localsettings import *
+    if os.environ['SERVER_SOFTWARE'].startswith('Development'):
+        from localsettings import *
 except ImportError:
+    pass
+except KeyError:
     pass

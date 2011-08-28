@@ -9,18 +9,6 @@ builtins:
 inbound_services:
 - warmup
 
-skip_files:
-- ^(.*/)?app\.yaml
-- ^(.*/)?app\.yml
-- ^(.*/)?index\.yaml
-- ^(.*/)?index\.yml
-- ^(.*/)?#.*#
-- ^(.*/)?.*~
-- ^(.*/)?.*\.py[co]
-- ^(.*/)?.*/RCS/.*
-- ^(.*/)?\..*
-- ^(.*/)?localsettings\.py
-
 handlers:
 - url: /_ah/queue/deferred
   script: djangoappengine/deferred/handler.py
