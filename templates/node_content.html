@@ -23,8 +23,9 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url premise node.id %}" class="add">Add New Premise</a>
-  <a href="{% url pin_existing node.id 2 %}" class="add">Pin Existing Premise</a>
+  Add Premise:
+  <a href="{% url premise node.id %}" class="add">Create New</a>
+  <a href="{% url pin_existing node.id 2 %}" class="add">Pin Existing</a>
 </div>
 <div class="html-content">
   {{ node.content|safe }}
@@ -37,8 +38,9 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url pro node.id %}" class="add">Add New Pro Argument</a>
-  <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing Pro Argument</a>
+  Add Pro Argument:
+  <a href="{% url pro node.id %}" class="add">Create New</a>
+  <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing</a>
 </div>
 <div class="con">
   {% if cons %}
@@ -48,7 +50,8 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url con node.id %}" class="add">Add New Con Argument</a>
-  <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing Con Argument</a>
+  Add Con Argument:
+  <a href="{% url con node.id %}" class="add">Create New</a>
+  <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing</a>
 </div>
 
