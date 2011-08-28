@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
+{% load hash_filter %}
+
 {% block title %}Unpinning node - {{ block.super }}{% endblock %}
 
 {% block content %} 
   <h1>Unpinning node</h1>
-  {% for relationship_text in relationships_text %}
-    <p>
-      <em>{{ child_node.title }}</em> is a
-      <strong>{{ relationship_text }}</strong> of
-      <em>{{ parent_node.title }}</em>.
-    </p>
-  {% endfor %}
+  <p>
+    <em>{{ child_node.title }}</em> is a
+    <strong>{{ relationship.relationship|hash:relationship_choices }}</strong> of
+    <em>{{ parent_node.title }}</em>.
+  </p>
   <form action="." method="post">
     <input type="submit" value="Unpin it" />
   </form>

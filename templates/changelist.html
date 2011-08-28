@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load hash_filter %}
+
+{% block title %}Changelist - {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>Changelist</h1>
+  {% if changes %}
+    <table class="changelist">
+      {% for change in changes %}
+        <tr>
+          <td class="date">
+            {{ change.date }}
+          </td>
+          <td>
+            {{ change.user }}
+            {% if change.change_type == 0 %}
+              pinned
+              {% include 'changelist_node.html' %}
+              as a
+              <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
+              to
+              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+            {% endif %}{% if change.change_type == 1 %}
+              unpinned
+              {% include 'changelist_node.html' %}
+              as a
+              <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
+              from
+              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+            {% endif %}{% if change.change_type == 2 %}
+              created
+              {% include 'changelist_node.html' %}.
+            {% endif %}{% if change.change_type == 3 %}
+              deleted
+              <em>{{ change.node_title }}</em>
+            {% endif %}{% if change.change_type == 4 %}
+              edited
+              {% include 'changelist_node.html' %}.
+            {% endif %}{% if change.change_type == 5 %}
+              added
+              {% include 'changelist_node.html' %}
+              as a
+              <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
+              to
+              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No changes in database.</p>
+  {% endif %}
+{% endblock %}

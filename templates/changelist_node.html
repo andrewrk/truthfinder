@@ -1,0 +1,5 @@
+{% if change.node.id %}
+<em><a href="{% url node change.node.id %}">{{ change.node_title }}</a></em>
+{% else %}
+<em>{{ change.node_title }}</em>
+{% endif %}

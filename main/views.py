@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 
-from main.models import TruthNode, NodeRelationship
+from main.models import TruthNode, NodeRelationship, ChangeNotification
 from main.forms import CreateNodeForm, NodeRelationshipForm
 
 from django.conf import settings
@@ -16,6 +16,9 @@ ok_emails = set([
     'superjoe30@gmail.com',
     'tyler.heald@gmail.com',
 ])
+
+
+
 def login_required(function):
     def decorated(*args, **kwargs):
         user = users.get_current_user() 
@@ -29,6 +32,12 @@ def login_required(function):
 def orphans(request):
     nodes = [n for n in TruthNode.objects.all() if NodeRelationship.objects.filter(child_node__pk=n.pk).count() == 0]
     return render_to_response('orphans.html', {'nodes': nodes}, 
+        context_instance=RequestContext(request))
+
+def changelist(request):
+    changes = ChangeNotification.objects.order_by('-date')[:40]
+    pin_type_names = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+    return render_to_response('changelist.html', locals(), 
         context_instance=RequestContext(request))
 
 def home(request):
@@ -53,6 +62,8 @@ def common_node(request, node_id):
     return {
         'node': node,
         'parents': parents,
+        'parent_rels': parent_rels,
+        'relationship_choices': dict(NodeRelationship.RELATIONSHIP_CHOICES),
         'pros': pros,
         'cons': cons,
         'premises': premises,
@@ -110,6 +121,13 @@ def add_node(request):
             rel.relationship = NodeRelationship.PRO
             rel.save()
 
+            change = ChangeNotification()
+            change.change_type = ChangeNotification.CREATE
+            change.user = users.get_current_user().nickname()
+            change.node = node
+            change.node_title = node.title
+            change.save()
+
             return HttpResponseRedirect(reverse('node', args=[node.id]))
     else:
         form = CreateNodeForm()
@@ -127,6 +145,14 @@ def edit_node(request, node_id):
             node.content = form.cleaned_data.get('content')
             node.save()
 
+            change = ChangeNotification()
+            change.change_type = ChangeNotification.EDIT
+            change.user = users.get_current_user().nickname()
+            change.node = node
+            change.node_title = node.title
+            change.save()
+
+
             return HttpResponseRedirect(reverse('node', args=[node.id]))
     else:
         form = CreateNodeForm(initial={
@@ -138,15 +164,25 @@ def edit_node(request, node_id):
         context_instance=RequestContext(request))
 
 @login_required
-def unpin_node(request, child_node_id, parent_node_id):
+def unpin_node(request, child_node_id, parent_node_id, relationship_type):
     child_node = get_object_or_404(TruthNode, pk=int(child_node_id))
     parent_node = get_object_or_404(TruthNode, pk=int(parent_node_id))
-    relationships = NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node)
-    choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
-    relationships_text = [choices[r.relationship] for r in relationships]
+    relationship = NodeRelationship.objects.get(parent_node=parent_node, child_node=child_node, relationship=int(relationship_type))
+    relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
     
     if request.method == 'POST':
-        NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node).delete()
+        change = ChangeNotification()
+        change.change_type = ChangeNotification.UNPIN
+        change.user = users.get_current_user().nickname()
+        change.node = child_node
+        change.node_title = child_node.title
+        change.pin_type = relationship.relationship
+        change.parent_node = parent_node
+        change.parent_node_title = parent_node.title
+        change.save()
+
+        relationship.delete()
+
         return HttpResponseRedirect(reverse('home'))
     else:
         return render_to_response('unpin.html', locals(),
@@ -164,6 +200,16 @@ def pin_node(request, node_id):
             relate.relationship = form.cleaned_data.get('relationship')
             relate.save()
 
+            change = ChangeNotification()
+            change.change_type = ChangeNotification.PIN
+            change.user = users.get_current_user().nickname()
+            change.node = relate.child_node
+            change.node_title = relate.child_node.title
+            change.pin_type = relate.relationship
+            change.parent_node = relate.parent_node
+            change.parent_node_title = relate.parent_node.title
+            change.save()
+
             return HttpResponseRedirect(reverse("node", args=[relate.parent_node.id]))
     else:
         form = NodeRelationshipForm()
@@ -174,9 +220,16 @@ def pin_node(request, node_id):
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     if request.method == 'POST':
+        change = ChangeNotification()
+        change.change_type = ChangeNotification.DELETE
+        change.user = users.get_current_user().nickname()
+        change.node_title = node.title
+        change.save()
+
         NodeRelationship.objects.filter(parent_node__pk=node.pk).delete()
         NodeRelationship.objects.filter(child_node__pk=node.pk).delete()
         node.delete()
+
         return HttpResponseRedirect(reverse('home'))
     else:
         return render_to_response('delete.html', {'node': node}, 
@@ -197,6 +250,17 @@ def add_arg(request, node_id, arg_type):
             relate.child_node = node
             relate.relationship = arg_type
             relate.save()
+
+            change = ChangeNotification()
+            change.change_type = ChangeNotification.ADD
+            change.user = users.get_current_user().nickname()
+            change.node = relate.child_node
+            change.node_title = relate.child_node.title
+            change.pin_type = relate.relationship
+            change.parent_node = relate.parent_node
+            change.parent_node_title = relate.parent_node.title
+            change.save()
+
 
             return HttpResponseRedirect(reverse('node', args=[parent.id]))
     else:

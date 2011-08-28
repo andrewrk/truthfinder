@@ -1,3 +1,5 @@
+{% load hash_filter %}
+
 <div class="tools">
   <a href="{% url node node.id %}">Link</a>
   <a href="{% url edit node.id %}">Edit</a>
@@ -5,9 +7,11 @@
   <a href="{% url pin node.id %}">Pin</a>
   {% if parents %}
     Parents: 
-    {% for parent in parents %}
-      <a href="{% url node parent.id %}">{{ parent.title }}</a>
-      <a href="{% url unpin node.id parent.id %}">(Unpin)</a>
+    {% for parent_rel in parent_rels %}
+      {% with parent_rel.parent_node as parent %}
+        <a href="{% url node parent.id %}">{{ parent.title }} ({{ parent_rel.relationship|hash:relationship_choices }})</a>
+        <a href="{% url unpin node.id parent.id parent_rel.relationship %}">(Unpin)</a>
+      {% endwith %}
     {% endfor %}
   {% endif %}
 </div>
@@ -19,7 +23,7 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url premise node.id %}" class="add">Add Premise</a>
+  <a href="{% url premise node.id %}" class="add">Add New Premise</a>
 </div>
 <div class="html-content">
   {{ node.content|safe }}
@@ -32,7 +36,7 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url pro node.id %}" class="add">Add Pro Argument</a>
+  <a href="{% url pro node.id %}" class="add">Add New Pro Argument</a>
 </div>
 <div class="con">
   {% if cons %}
@@ -42,6 +46,6 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  <a href="{% url con node.id %}" class="add">Add Con Argument</a>
+  <a href="{% url con node.id %}" class="add">Add New Con Argument</a>
 </div>
 

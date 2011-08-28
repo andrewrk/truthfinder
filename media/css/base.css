@@ -18,6 +18,12 @@ ul {
     border-bottom: 1px solid black;
 }
 
+#nav {
+    margin-top: 50px;
+    float: right;
+    clear: both;
+}
+
 #logo h3 {
     margin: 0;
     padding: 4px;
@@ -89,4 +95,21 @@ td.label {
 
 input.nodeid {
     width: 100px;
+}
+
+table.changelist {
+    border-collapse: collapse;
+    border: none;
+}
+
+table.changelist td {
+    border: none;
+}
+
+table.changelist .date {
+    font-size: .9em;
+    background: #F0F0F0;
+    padding: 4px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
 }

@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <a href="{% url add %}">Add New Truth</a>
-  <a href="{% url orphans %}">Orphans</a>
   {% if nodes %}
     <h2>Truths in database:</h2>
     {% for node in nodes %}
