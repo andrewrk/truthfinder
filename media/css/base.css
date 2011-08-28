@@ -2,6 +2,18 @@ body {
     font-family: Verdana, Arial, sans-serif;
 }
 
+li li {
+    list-style-type: circle;
+}
+
+li li li {
+    list-style-type: square;
+}
+
+ul {
+    margin-left: .1em;
+}
+
 #header {
     border-bottom: 1px solid black;
 }
