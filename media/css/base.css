@@ -98,7 +98,6 @@ input.nodeid {
 }
 
 table.changelist {
-    border-collapse: collapse;
     border: none;
 }
 
@@ -112,4 +111,5 @@ table.changelist .date {
     padding: 4px;
     -moz-border-radius: 15px;
     border-radius: 15px;
+    width: 200px;
 }
