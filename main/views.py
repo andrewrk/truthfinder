@@ -8,14 +8,14 @@ from django.http import HttpResponseRedirect, HttpResponse
 from main.models import TruthNode, NodeRelationship
 from main.forms import CreateNodeForm, NodeRelationshipForm
 
+from django.conf import settings
+
 import simplejson as json
 
 ok_emails = set([
     'superjoe30@gmail.com',
     'tyler.heald@gmail.com',
 ])
-home_page_id = 19023
-
 def login_required(function):
     def decorated(*args, **kwargs):
         user = users.get_current_user() 
@@ -32,7 +32,7 @@ def orphans(request):
         context_instance=RequestContext(request))
 
 def home(request):
-    nodes = [rel.child_node for rel in NodeRelationship.objects.filter(parent_node__pk=home_page_id)]
+    nodes = [rel.child_node for rel in NodeRelationship.objects.filter(parent_node__pk=settings.HOME_PAGE_ID)]
     return render_to_response('home.html', {'nodes': nodes}, 
         context_instance=RequestContext(request))
 
@@ -87,7 +87,7 @@ def ajax_search(request):
 
 def node(request, node_id):
     # redirect to home page if home page is requested
-    if int(node_id) == home_page_id:
+    if int(node_id) == settings.HOME_PAGE_ID:
         return HttpResponseRedirect('/')
 
     context = common_node(request, node_id)
@@ -105,7 +105,7 @@ def add_node(request):
             node.save()
 
             rel = NodeRelationship()
-            rel.parent_node = TruthNode.objects.get(pk=home_page_id)
+            rel.parent_node = TruthNode.objects.get(pk=settings.HOME_PAGE_ID)
             rel.child_node = node
             rel.relationship = NodeRelationship.PRO
             rel.save()

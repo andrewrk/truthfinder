@@ -5,6 +5,8 @@ from djangoappengine.settings_base import *
 
 import os
 
+HOME_PAGE_ID = 19023
+
 # Uncomment this if you're using the high-replication datastore.
 # TODO: Once App Engine fixes the "s~" prefix mess we can remove this.
 #DATABASES['default']['HIGH_REPLICATION'] = True

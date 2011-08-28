@@ -1,6 +1,9 @@
 * ability to delete/unpin ONLY the pro/con/premise
 * ability to pin the inverse of a node
 * ability to leave the big text box blank
+* /orphans/ should automatically apply home page pinning, and use a cache so 
+  that it can only be run every 10 min or so
+* hide home page pinning from user
 * search
 * warning popup if you're editing and leave the page
 * better css
