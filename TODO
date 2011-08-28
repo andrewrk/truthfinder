@@ -1,6 +1,5 @@
 * ability to add pro/con/premise that already exists
 * ability to pin the inverse of a node
-* ability to leave the big text box blank
 
 * /orphans/ should automatically apply home page pinning, and use a cache so 
   that it can only be run every 10 min or so

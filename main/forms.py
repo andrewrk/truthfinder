@@ -60,6 +60,10 @@ class CreateNodeForm(forms.ModelForm):
         model = TruthNode
         exclude = ('create_date', 'edit_date')
 
+    def __init__(self, *args, **kwargs):
+        super(CreateNodeForm, self).__init__(*args, **kwargs)
+        self.fields['content'].required = False
+
     def clean_content(self):
         content = self.cleaned_data['content']
         return bleach.clean(content, tags=allowed_tags,
