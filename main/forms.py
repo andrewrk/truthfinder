@@ -3,6 +3,11 @@ from main.models import TruthNode, NodeRelationship
 import bleach
 
 allowed_tags = [
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
     'a',
     'abbr',
     'acronym',
@@ -14,6 +19,7 @@ allowed_tags = [
     'li',
     'ol',
     'strong',
+    'u',
     'ul',
     'br',
     'font',
