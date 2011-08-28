@@ -17,8 +17,6 @@ ok_emails = set([
     'tyler.heald@gmail.com',
 ])
 
-
-
 def login_required(function):
     def decorated(*args, **kwargs):
         user = users.get_current_user() 
