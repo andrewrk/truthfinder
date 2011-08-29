@@ -15,6 +15,8 @@ import simplejson as json
 ok_emails = set([
     'superjoe30@gmail.com',
     'tyler.heald@gmail.com',
+    'thejoshwolfe@gmail.com',
+    'suraphael@gmail.com',
 ])
 
 def login_required(function):
