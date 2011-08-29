@@ -22,14 +22,14 @@
               as a
               <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
               to
-              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+              {% include 'changelist_parent_node.html' %}
             {% endif %}{% if change.change_type == 1 %}
               unpinned
               {% include 'changelist_node.html' %}
               as a
               <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
               from
-              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+              {% include 'changelist_parent_node.html' %}
             {% endif %}{% if change.change_type == 2 %}
               created
               {% include 'changelist_node.html' %}.
@@ -45,7 +45,7 @@
               as a
               <strong>{{ change.pin_type|hash:pin_type_names }}</strong>
               to
-              <em><a href="{% url node change.parent_node.id %}">{{ change.parent_node_title }}</a></em>.
+              {% include 'changelist_parent_node.html' %}
             {% endif %}
           </td>
         </tr>
