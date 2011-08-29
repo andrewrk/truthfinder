@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Pinning node - {{ block.super }}{% endblock %}
+{% block title %}Pinning claim - {{ block.super }}{% endblock %}
 
 {% block content %} 
-  <h1>Pinning node</h1>
+  <h1>Pinning Claim</h1>
   <form action="." method="post">
     {{ form.non_field_errors }}
     <table>
       <tr>
         <td class="label">
-          This truth:
+          This claim:
         </td>
         <td>
           <em>{{ child_node.title }}</em>
