@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load hash_filter %}
+
+{% block title %}Inverting claim - {{ block.super }}{% endblock %}
+
+{% block content %} 
+  <h1>Unpinning claim</h1>
+  <p>
+    {% if rel.invert_child %}<strong>Not (</strong>{% endif %}
+    <em>{{ rel.child_node.title }}</em>
+    {% if rel.invert_child %}<strong>)</strong>{% endif %}
+    is a
+    <strong>{{ rel.relationship|hash:rel_choices }}</strong> of
+    <em>{{ rel.parent_node.title }}</em>.
+  </p>
+  <form action="." method="post">
+    <input type="submit" value="Invert it" />
+  </form>
+{% endblock %}

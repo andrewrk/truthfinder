@@ -7,11 +7,12 @@
   <a href="{% url pin node.id %}">Pin</a>
   {% if node_rel %}
     <a href="{% url unpin node_rel.id %}">Unpin</a>
+    <a href="{% url invert node_rel.id %}">Invert</a>
   {% endif %}
   {% if parent_rels %}
     Parents: 
     {% for parent_rel in parent_rels %}
-      <a href="{% url node parent_rel.parent_node.id %}">{{ parent_rel.parent_node.title }} ({{ parent_rel.relationship|hash:relationship_choices }})</a>
+      <a href="{% url node parent_rel.parent_node.id %}">{{ parent_rel.parent_node.title }} ({% if parent_rel.invert_child %}Inverted {% endif %}{{ parent_rel.relationship|hash:relationship_choices }})</a>
     {% endfor %}
   {% endif %}
 </div>

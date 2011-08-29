@@ -113,3 +113,9 @@ table.changelist .date {
     border-radius: 15px;
     width: 200px;
 }
+
+.inverted  > h2 > a {
+    background: url(/media/img/invert.png) no-repeat;
+    background-position: 0 4px;
+    padding-left: 18px;
+}

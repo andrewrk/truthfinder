@@ -92,6 +92,9 @@ def ajax_rel(request, rel_id):
     context = common_node(request, node_rel.child_node.id)
     context['node_rel'] = node_rel
 
+    if node_rel.invert_child:
+        context['pro_rels'], context['con_rels'] = context['con_rels'], context['pro_rels']
+
     return render_to_response('node_content.html', context,
         context_instance=RequestContext(request))
 
@@ -168,6 +171,20 @@ def edit_node(request, node_id):
         context_instance=RequestContext(request))
 
 @login_required
+def invert(request, rel_id):
+    rel = get_object_or_404(NodeRelationship, pk=int(rel_id))
+    rel_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+
+    if request.method == 'POST':
+        rel.invert_child = not rel.invert_child
+        rel.save()
+
+        return HttpResponseRedirect(reverse('node', args=[rel.parent_node.id]))
+    else:
+        return render_to_response('invert.html', locals(), 
+            context_instance=RequestContext(request))
+
+@login_required
 def unpin_node(request, node_rel_id):
     relationship = get_object_or_404(NodeRelationship, pk=int(node_rel_id))
     relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
@@ -185,7 +202,7 @@ def unpin_node(request, node_rel_id):
 
         relationship.delete()
 
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('node', args=[relationship.parent_node.id]))
     else:
         return render_to_response('unpin.html', locals(),
             context_instance=RequestContext(request))

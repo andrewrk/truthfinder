@@ -9,12 +9,12 @@ urlpatterns = patterns('',
     url(r'^$', 'main.views.home', name='home'),
 
     url(r'^orphans/$', 'main.views.orphans', name='orphans'),
-
     url(r'^search/$', direct_to_template, {'template': 'search.html'}, name='search'),
 
     url(r'^changelist/$', 'main.views.changelist', name='changelist'),
     url(r'^add/$', 'main.views.add_node', name='add'),
     url(r'^unpin/(\d+)/$', 'main.views.unpin_node', name='unpin'),
+    url(r'^invert/(\d+)/$', 'main.views.invert', name='invert'),
     url(r'^node/(\d+)/$', 'main.views.node', name='node'),
     url(r'^ajax/rel/(\d+)/$', 'main.views.ajax_rel', name='ajax_rel'),
     url(r'^ajax/search/$', 'main.views.ajax_search', name='ajax_search'),
