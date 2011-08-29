@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load hash_filter %}
+{% load l10n %}
 
 {% block title %}Changelist - {{ block.super }}{% endblock %}
 
@@ -11,7 +12,7 @@
       {% for change in changes %}
         <tr>
           <td class="date">
-            {{ change.date }}
+            {{ change.date|localize }}
           </td>
           <td>
             {{ change.user }}
