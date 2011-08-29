@@ -9,8 +9,14 @@ function parseForDropdowns(dom) {
         $(link).click(function() {
             if ($(node_content).attr('data-shown') === '0') {
                 $(node_content).attr('data-shown', '1');
-                $.get(
-                    "/ajax/node/" + $(link).attr('data-nodeid') + "/",
+
+                var relid = $(link).attr('data-relid');
+                var nodeid = $(link).attr('data-nodeid');
+                var url = (relid === undefined) ?
+                    ("/ajax/node/" + nodeid + "/") :
+                    ("/ajax/rel/" + relid + "/") ;
+
+                $.get(url,
                     function (data) {
                         $(node_content).html(data);
                         parseForDropdowns($(node_content));

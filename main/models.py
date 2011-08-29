@@ -24,6 +24,9 @@ class NodeRelationship(models.Model):
     # child's relationship to parent
     relationship = models.IntegerField(choices=RELATIONSHIP_CHOICES)
 
+    # if True, child has an inverse relationship with parent
+    invert_child = models.BooleanField(default=False)
+
 class ChangeNotification(models.Model):
     PIN, UNPIN, CREATE, DELETE, EDIT, ADD = range(6)
     NOTIFICATION_CHOICES = (

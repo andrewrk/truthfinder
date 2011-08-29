@@ -2,14 +2,14 @@
 
 {% load hash_filter %}
 
-{% block title %}Unpinning node - {{ block.super }}{% endblock %}
+{% block title %}Unpinning claim - {{ block.super }}{% endblock %}
 
 {% block content %} 
-  <h1>Unpinning node</h1>
+  <h1>Unpinning claim</h1>
   <p>
-    <em>{{ child_node.title }}</em> is a
+    <em>{{ relationship.child_node.title }}</em> is a
     <strong>{{ relationship.relationship|hash:relationship_choices }}</strong> of
-    <em>{{ parent_node.title }}</em>.
+    <em>{{ relationship.parent_node.title }}</em>.
   </p>
   <form action="." method="post">
     <input type="submit" value="Unpin it" />

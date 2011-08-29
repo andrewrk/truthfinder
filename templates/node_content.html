@@ -5,21 +5,23 @@
   <a href="{% url edit node.id %}">Edit</a>
   <a href="{% url delete node.id %}">Delete</a>
   <a href="{% url pin node.id %}">Pin</a>
-  {% if parents %}
+  {% if node_rel %}
+    <a href="{% url unpin node_rel.id %}">Unpin</a>
+  {% endif %}
+  {% if parent_rels %}
     Parents: 
     {% for parent_rel in parent_rels %}
-      {% with parent_rel.parent_node as parent %}
-        <a href="{% url node parent.id %}">{{ parent.title }} ({{ parent_rel.relationship|hash:relationship_choices }})</a>
-        <a href="{% url unpin node.id parent.id parent_rel.relationship %}">(Unpin)</a>
-      {% endwith %}
+      <a href="{% url node parent_rel.parent_node.id %}">{{ parent_rel.parent_node.title }} ({{ parent_rel.relationship|hash:relationship_choices }})</a>
     {% endfor %}
   {% endif %}
 </div>
 <div class="premise">
-  {% if premises %}
-    {% for premise in premises %}
-      {% with premise as node %}
-        {% include 'expandable_node.html' %}
+  {% if premise_rels %}
+    {% for premise_rel in premise_rels %}
+      {% with premise_rel as node_rel %}
+        {% with node_rel.child_node as node %}
+          {% include 'expandable_node.html' %}
+        {% endwith %}
       {% endwith %}
     {% endfor %}
   {% endif %}
@@ -31,10 +33,12 @@
   {{ node.content|safe }}
 </div>
 <div class="pro">
-  {% if pros %}
-    {% for pro in pros %}
-      {% with pro as node %}
-        {% include 'expandable_node.html' %}
+  {% if pro_rels %}
+    {% for pro_rel in pro_rels %}
+      {% with pro_rel as node_rel %}
+        {% with node_rel.child_node as node %}
+          {% include 'expandable_node.html' %}
+        {% endwith %}
       {% endwith %}
     {% endfor %}
   {% endif %}
@@ -43,10 +47,12 @@
   <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing</a>
 </div>
 <div class="con">
-  {% if cons %}
-    {% for con in cons %}
-      {% with con as node %}
-        {% include 'expandable_node.html' %}
+  {% if con_rels %}
+    {% for con_rel in con_rels %}
+      {% with con_rel as node_rel %}
+        {% with node_rel.child_node as node %}
+          {% include 'expandable_node.html' %}
+        {% endwith %}
       {% endwith %}
     {% endfor %}
   {% endif %}

@@ -41,41 +41,31 @@ def changelist(request):
         context_instance=RequestContext(request))
 
 def home(request):
-    nodes = [rel.child_node for rel in NodeRelationship.objects.filter(parent_node__pk=settings.HOME_PAGE_ID)]
-    return render_to_response('home.html', {'nodes': nodes}, 
+    node_rels = NodeRelationship.objects.filter(parent_node__pk=settings.HOME_PAGE_ID)
+    return render_to_response('home.html', {'node_rels': node_rels}, 
         context_instance=RequestContext(request))
 
 def common_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
 
     parent_rels = NodeRelationship.objects.filter(child_node__pk=node.pk)
-    parents = [rel.parent_node for rel in parent_rels]
 
     children_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
     pro_rels = children_rels.filter(relationship=NodeRelationship.PRO)
     con_rels = children_rels.filter(relationship=NodeRelationship.CON)
     premise_rels = children_rels.filter(relationship=NodeRelationship.PREMISE)
-    pros = [rel.child_node for rel in pro_rels]
-    cons = [rel.child_node for rel in con_rels]
-    premises = [rel.child_node for rel in premise_rels]
 
     return {
         'node': node,
-        'parents': parents,
-        'parent_rels': parent_rels,
         'relationship_choices': dict(NodeRelationship.RELATIONSHIP_CHOICES),
-        'pros': pros,
-        'cons': cons,
-        'premises': premises,
+        'parent_rels': parent_rels,
+        'pro_rels': pro_rels,
+        'con_rels': con_rels,
+        'premise_rels': premise_rels,
     }
 
 def json_response(data):
     return HttpResponse(json.dumps(data), mimetype="text/plain")
-
-def ajax_node(request, node_id):
-    context = common_node(request, node_id)
-    return render_to_response('node_content.html', context, 
-        context_instance=RequestContext(request))
 
 def ajax_search(request):
     query = request.GET.get('term')
@@ -95,6 +85,20 @@ def ajax_search(request):
         })
 
     return json_response(data)
+
+def ajax_rel(request, rel_id):
+    node_rel = get_object_or_404(NodeRelationship, pk=int(rel_id))
+
+    context = common_node(request, node_rel.child_node.id)
+    context['node_rel'] = node_rel
+
+    return render_to_response('node_content.html', context,
+        context_instance=RequestContext(request))
+
+def ajax_node(request, node_id):
+    context = common_node(request, node_id)
+    return render_to_response('node_content.html', context, 
+        context_instance=RequestContext(request))
 
 def node(request, node_id):
     # redirect to home page if home page is requested
@@ -164,21 +168,19 @@ def edit_node(request, node_id):
         context_instance=RequestContext(request))
 
 @login_required
-def unpin_node(request, child_node_id, parent_node_id, relationship_type):
-    child_node = get_object_or_404(TruthNode, pk=int(child_node_id))
-    parent_node = get_object_or_404(TruthNode, pk=int(parent_node_id))
-    relationship = NodeRelationship.objects.get(parent_node=parent_node, child_node=child_node, relationship=int(relationship_type))
+def unpin_node(request, node_rel_id):
+    relationship = get_object_or_404(NodeRelationship, pk=int(node_rel_id))
     relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
-    
+
     if request.method == 'POST':
         change = ChangeNotification()
         change.change_type = ChangeNotification.UNPIN
         change.user = users.get_current_user().nickname()
-        change.node = child_node
-        change.node_title = child_node.title
+        change.node = relationship.child_node
+        change.node_title = relationship.child_node.title
         change.pin_type = relationship.relationship
-        change.parent_node = parent_node
-        change.parent_node_title = parent_node.title
+        change.parent_node = relationship.parent_node
+        change.parent_node_title = relationship.parent_node.title
         change.save()
 
         relationship.delete()

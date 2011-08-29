@@ -1,5 +1,10 @@
 <div class="node">
-  <h2><a data-nodeid="{{ node.id }}" href="{% url node node.id %}">{{ node.title }}</a></h2>
+  <h2><a
+    {% if node_rel %}
+      data-relid="{{ node_rel.id }}"
+    {% endif %}
+    data-nodeid="{{ node.id }}"
+    href="{% url node node.id %}">{{ node.title }}</a></h2>
   <div class="node-content" style="display: none;">
   </div>
 </div>
