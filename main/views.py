@@ -219,6 +219,7 @@ def pin_existing(request, node_id, relationship_type):
             relate.parent_node = form.cleaned_data.get('parent_node')
             relate.child_node = form.cleaned_data.get('child_node')
             relate.relationship = form.cleaned_data.get('relationship')
+            relate.invert_child = form.cleaned_data.get('invert_child')
             relate.save()
 
             change = ChangeNotification()
@@ -250,6 +251,7 @@ def pin_node(request, node_id):
             relate.parent_node = form.cleaned_data.get('parent_node')
             relate.child_node = form.cleaned_data.get('child_node')
             relate.relationship = form.cleaned_data.get('relationship')
+            relate.invert_child = form.cleaned_data.get('invert_child')
             relate.save()
 
             change = ChangeNotification()
