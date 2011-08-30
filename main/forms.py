@@ -54,6 +54,9 @@ allowed_styles = [
     'font-size',
     'line-height',
     'text-decoration',
+    'background-color',
+    'color',
+    'text-align',
 ]
 
 class CreateNodeForm(forms.ModelForm):
