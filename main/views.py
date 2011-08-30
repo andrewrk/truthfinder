@@ -42,7 +42,8 @@ def changelist(request):
 
 def home(request):
     node_rels = NodeRelationship.objects.filter(parent_node__pk=settings.HOME_PAGE_ID)
-    return render_to_response('home.html', {'node_rels': node_rels}, 
+    nodes = [rel.child_node for rel in node_rels]
+    return render_to_response('home.html', {'nodes': nodes}, 
         context_instance=RequestContext(request))
 
 def common_node(request, node_id):

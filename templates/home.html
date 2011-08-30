@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% if node_rels %}
+  {% if nodes %}
     <h2>Claims in database:</h2>
-    {% for node_rel in node_rels %}
-      {% with node_rel.child_node as node %}
-        {% include 'expandable_node.html' %}
-      {% endwith %}
+    {% for node in nodes %}
+      {% include 'expandable_node.html' %}
     {% endfor %}
   {% else %}
     <p>Nothing in database yet!</p>
