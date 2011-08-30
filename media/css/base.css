@@ -1,5 +1,6 @@
 body {
     font-family: Verdana, Arial, sans-serif;
+    color: #404040;
 }
 
 li li {
@@ -42,10 +43,6 @@ ul {
     padding: 10px;
 }
 
-.node-header {
-    padding: 10px;
-}
-
 .node h2 {
     margin: 0;
     padding: 0;
@@ -53,9 +50,11 @@ ul {
     font-weight: normal;
 }
 
-.node h2 a, .node h1, h3 {
+.node h2 a {
     text-decoration: none;
     color: #404040;
+    padding: 10px;
+    display: block;
 }
 
 h3 {
@@ -149,6 +148,39 @@ table.changelist .date {
     padding: 10px;
     border: 1px solid #DEDEDE;
     color: #292929;
+}
+
+.html-content h1, .html-content h2, .html-content h3, .html-content h4, .html-content h5 {
+    font-weight: bold !important;
+    margin: 4px 0 !important;
+    padding: 4px 0 !important;
+}
+
+.html-content h1 {
+    font-size: 1.5em !important;
+    color: #000000 !important;
+}
+
+.html-content h2 {
+    font-size: 1.2em !important;
+}
+
+.html-content h3 {
+    font-size: 1em !important;
+    font-weight: bold !important;
+}
+
+.html-content ul {
+    margin: 10px 0;
+}
+
+.html-content li > ul {
+    margin: 4px;
+}
+
+.html-content p {
+    margin: 10px;
+    padding: 0 10px;
 }
 
 div.tools {
