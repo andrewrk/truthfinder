@@ -35,6 +35,14 @@ ul {
 .node {
     border: 1px solid #D4D4D4;
     margin: 20px 0;
+    padding: 0;
+}
+
+.node-content {
+    padding: 10px;
+}
+
+.node-header {
     padding: 10px;
 }
 
@@ -45,9 +53,13 @@ ul {
     font-weight: normal;
 }
 
-.node h2 a {
+.node h2 a, .node h1, h3 {
     text-decoration: none;
     color: #404040;
+}
+
+h3 {
+    margin-left: 10px;
 }
 
 .add {
@@ -55,30 +67,30 @@ ul {
     padding: 10px;
 }
 
-.pro .node {
+.pro > .node > .node-header {
     background-color: #90ff9d;
     border-color: #79D684;
 }
 
-.pro .add a {
+.pro > .add > a {
     background-color: #90FF9D !important;
 }
 
-.con .node {
+.con > .node > .node-header {
     background-color: #FF9A9A;
     border-color: #D48080;
 }
 
-.con .add a {
+.con > .add > a {
     background-color: #FF9A9A !important;
 }
 
-.premise .node {
+.premise > .node > .node-header {
     background-color: #dce6f3;
     border-color: #A9B0BA;
 }
 
-.premise .add a {
+.premise  > .add >  a {
     background-color: #DCE6F3 !important;
 }
 
