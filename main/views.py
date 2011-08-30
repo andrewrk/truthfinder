@@ -19,6 +19,15 @@ ok_emails = set([
     'suraphael@gmail.com',
 ])
 
+def admin_required(function):
+    def decorated(*args, **kwargs):
+        if users.is_current_user_admin():
+            return function(*args, **kwargs)
+        else:
+            request = args[0]
+            return HttpResponseRedirect(users.create_login_url(request.path))
+    return decorated
+
 def login_required(function):
     def decorated(*args, **kwargs):
         user = users.get_current_user() 
@@ -29,21 +38,24 @@ def login_required(function):
             return HttpResponseRedirect(users.create_login_url(request.path))
     return decorated
 
-def orphans(request):
-    nodes = [n for n in TruthNode.objects.all() if NodeRelationship.objects.filter(child_node__pk=n.pk).count() == 0]
-    return render_to_response('orphans.html', {'nodes': nodes}, 
+def node_children(request, template, node_id):
+    node_rels = NodeRelationship.objects.filter(parent_node__pk=node_id)
+    return render_to_response(template, {'node_rels': node_rels}, 
         context_instance=RequestContext(request))
+
+def orphans(request):
+    return node_children(request, 'orphans.html', settings.ORPHANS_ID)
+
+def home(request):
+    return node_children(request, 'home.html', settings.HOME_PAGE_ID)
+
+def flagged(request):
+    return node_children(request, 'flagged.html', settings.FLAG_ID)
 
 def changelist(request):
     changes = ChangeNotification.objects.order_by('-date')[:40]
     pin_type_names = dict(NodeRelationship.RELATIONSHIP_CHOICES)
     return render_to_response('changelist.html', locals(), 
-        context_instance=RequestContext(request))
-
-def home(request):
-    node_rels = NodeRelationship.objects.filter(parent_node__pk=settings.HOME_PAGE_ID)
-    nodes = [rel.child_node for rel in node_rels]
-    return render_to_response('home.html', {'nodes': nodes}, 
         context_instance=RequestContext(request))
 
 def common_node(request, node_id):
@@ -64,6 +76,19 @@ def common_node(request, node_id):
         'con_rels': con_rels,
         'premise_rels': premise_rels,
     }
+
+@admin_required
+def cron_orphans(request):
+    for node in TruthNode.objects.all():
+        if NodeRelationship.objects.filter(child_node__pk=node.pk).count() == 0:
+            # this is an orphan. pin it to orphans.
+            rel = NodeRelationship()
+            rel.child_node = node
+            rel.parent_node = TruthNode.objects.get(pk=settings.ORPHANS_ID)
+            rel.relationship = NodeRelationship.PRO
+            rel.save()
+
+    return json_response({"success": True})
 
 def json_response(data):
     return HttpResponse(json.dumps(data), mimetype="text/plain")

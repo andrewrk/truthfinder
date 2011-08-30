@@ -2,3 +2,7 @@ cron:
 - description: keep alive
   url: /
   schedule: every 2 minutes
+
+- description: pin orphans to home page
+  url: /cron/orphans/
+  schedule: every 10 minutes
