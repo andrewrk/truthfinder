@@ -1,9 +1,13 @@
-TruthFinder.org website
+TruthFinder.org Website
 
+    The goal of truthfinder.org is to provide a platform where all sides of any
+    debate can be fully fleshed out in an organized manner, so that any person
+    seeking the truth can get an objective view.
 
-To set up development environment, create localsettings.py to override any
-settings.py values you want. Make sure environment variable SERVER_SOFTWARE
-is set to "Development/0.0".
+Setting up a development environment:
 
-You need to create a "Home Page" node and set HOME_PAGE_ID to the node ID in 
-your local settings. 
+    * Create localsettings.py to override any settings.py values you want.
+    * Make sure environment variable SERVER_SOFTWARE is set to "Development/0.0"
+    * Create a "Home Page" node and set HOME_PAGE_ID to the node ID in your
+      local settings. 
+    * Same for FLAG_ID and ORPHAN_ID
