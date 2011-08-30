@@ -7,9 +7,9 @@
 
 {% block content %}
   <h1>Changelist</h1>
-  {% if changes %}
+  {% if changes.object_list %}
     <table class="changelist">
-      {% for change in changes %}
+      {% for change in changes.object_list %}
         <tr>
           <td class="date">
             {{ change.date|localize }}
@@ -51,6 +51,21 @@
         </tr>
       {% endfor %}
     </table>
+    <div class="pagination">
+      <span class="step-links">
+        {% if changes.has_previous %}
+            <a href="?page={{ changes.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ changes.number }} of {{ changes.paginator.num_pages }}.
+        </span>
+
+        {% if changes.has_next %}
+            <a href="?page={{ changes.next_page_number }}">next</a>
+        {% endif %}
+      </span>
+    </div>
   {% else %}
     <p>No changes in database.</p>
   {% endif %}

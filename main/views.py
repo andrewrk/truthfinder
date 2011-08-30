@@ -4,11 +4,11 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.conf import settings
 
 from main.models import TruthNode, NodeRelationship, ChangeNotification
 from main.forms import CreateNodeForm, NodeRelationshipForm
-
-from django.conf import settings
 
 import simplejson as json
 
@@ -53,9 +53,23 @@ def flagged(request):
     return node_children(request, 'flagged.html', settings.FLAG_ID)
 
 def changelist(request):
-    changes = ChangeNotification.objects.order_by('-date')[:40]
-    pin_type_names = dict(NodeRelationship.RELATIONSHIP_CHOICES)
-    return render_to_response('changelist.html', locals(), 
+    paginator = Paginator(ChangeNotification.objects.order_by('-date'), 40)
+
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    try:
+        changes = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        changes = paginator.page(paginator.num_pages)
+    
+    context = {
+        'pin_type_names': dict(NodeRelationship.RELATIONSHIP_CHOICES),
+        'changes': changes,
+    }
+    return render_to_response('changelist.html', context, 
         context_instance=RequestContext(request))
 
 def common_node(request, node_id):
