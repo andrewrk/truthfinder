@@ -1,6 +1,4 @@
 * warning popup if you're editing and leave the page
 * design
-    - better css
     - Fix bullet point error. Bullet points show up in the saved document when they do not in the editing window.
-    - Deeper indentation for sub-pro's and con's to make them more easily distinguishable.
 * mass-pin button

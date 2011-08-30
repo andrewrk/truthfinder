@@ -18,6 +18,7 @@
 </div>
 <div class="premise">
   {% if premise_rels %}
+    <h3>Premises</h3>
     {% for premise_rel in premise_rels %}
       {% with premise_rel as node_rel %}
         {% with node_rel.child_node as node %}
@@ -26,15 +27,21 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  Add Premise:
-  <a href="{% url premise node.id %}" class="add">Create New</a>
-  <a href="{% url pin_existing node.id 2 %}" class="add">Pin Existing</a>
+  <div class="add">
+    Add Premise:
+    <a href="{% url premise node.id %}" class="add">Create New</a>
+    <a href="{% url pin_existing node.id 2 %}" class="add">Pin Existing</a>
+  </div>
 </div>
-<div class="html-content">
-  {{ node.content|safe }}
-</div>
+{% if node.content %}
+  <h3>Explanation</h3>
+  <div class="html-content">
+    {{ node.content|safe }}
+  </div>
+{% endif %}
 <div class="pro">
   {% if pro_rels %}
+    <h3>Arguments For</h3>
     {% for pro_rel in pro_rels %}
       {% with pro_rel as node_rel %}
         {% with node_rel.child_node as node %}
@@ -43,12 +50,15 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  Add Pro Argument:
-  <a href="{% url pro node.id %}" class="add">Create New</a>
-  <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing</a>
+  <div class="add">
+    Add Pro Argument:
+    <a href="{% url pro node.id %}" class="add">Create New</a>
+    <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing</a>
+  </div>
 </div>
 <div class="con">
   {% if con_rels %}
+    <h3>Arguments Against</h3>
     {% for con_rel in con_rels %}
       {% with con_rel as node_rel %}
         {% with node_rel.child_node as node %}
@@ -57,8 +67,10 @@
       {% endwith %}
     {% endfor %}
   {% endif %}
-  Add Con Argument:
-  <a href="{% url con node.id %}" class="add">Create New</a>
-  <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing</a>
+  <div class="add">
+    Add Con Argument:
+    <a href="{% url con node.id %}" class="add">Create New</a>
+    <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing</a>
+  </div>
 </div>
 

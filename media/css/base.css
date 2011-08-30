@@ -24,18 +24,6 @@ ul {
     clear: both;
 }
 
-#logo h3 {
-    margin: 0;
-    padding: 4px;
-}
-
-#logo h3 a {
-    font-family: Arial, Verdana, sans-serif;
-    font-size: 24px;
-    text-decoration: none;
-    color: black;
-}
-
 #account {
     float: right;
 }
@@ -45,32 +33,55 @@ ul {
 }
 
 .node {
-    border: 1px solid black;
-    margin: 10px 0;
+    border: 1px solid #D4D4D4;
+    margin: 20px 0;
     padding: 10px;
 }
 
 .node h2 {
     margin: 0;
     padding: 0;
+    font-size: 1em;
+    font-weight: normal;
 }
 
 .node h2 a {
-    font-size: 16px;
-    font-weight: bold;
+    text-decoration: none;
+    color: #404040;
 }
 
-.pro {
-    background-color: #ddffdd;
+.add {
+    margin: 10px 0;
+    padding: 10px;
 }
 
-.con {
-    background-color: #ffdddd;
+.pro .node {
+    background-color: #90ff9d;
+    border-color: #79D684;
 }
 
-.premise {
+.pro .add a {
+    background-color: #90FF9D !important;
+}
+
+.con .node {
+    background-color: #FF9A9A;
+    border-color: #D48080;
+}
+
+.con .add a {
+    background-color: #FF9A9A !important;
+}
+
+.premise .node {
     background-color: #dce6f3;
+    border-color: #A9B0BA;
 }
+
+.premise .add a {
+    background-color: #DCE6F3 !important;
+}
+
 
 #id_title {
     width: 650px;
@@ -114,8 +125,31 @@ table.changelist .date {
     width: 200px;
 }
 
-.inverted  > h2 > a {
+.inverted > h2 > a {
     background: url(/media/img/invert.png) no-repeat;
     background-position: 0 4px;
     padding-left: 18px;
+}
+
+.html-content {
+    background-color: #EAEAEA;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #DEDEDE;
+    color: #292929;
+}
+
+div.tools {
+    margin: 8px 0 0 0;
+}
+
+.tools a, .add a {
+    text-decoration: none;
+    margin: 2px 2px 2px 0;
+    padding: 2px 4px;
+    background-color: #C5C5C5 !important;
+    color: #404040;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-size: 0.8em;
 }
