@@ -21,6 +21,10 @@ handlers:
   static_files: media/google7f3ad6d23836e1d8.html
   upload: media/google7f3ad6d23836e1d8.html
 
+- url: /robots.txt
+  static_files: media/robots.txt
+  upload: media/robots.txt
+
 - url: /media/admin
   static_dir: django/contrib/admin/media
   expiration: '0'
