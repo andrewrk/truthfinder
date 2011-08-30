@@ -53,6 +53,7 @@ allowed_attrs = {
 allowed_styles = [
     'font-size',
     'line-height',
+    'text-decoration',
 ]
 
 class CreateNodeForm(forms.ModelForm):
