@@ -1,12 +1,6 @@
-* /orphans/ should automatically apply home page pinning, and use a cache so 
-  that it can only be run every 10 min or so
-* hide home page pinning from user
 * warning popup if you're editing and leave the page
 * design
     - better css
     - Fix bullet point error. Bullet points show up in the saved document when they do not in the editing window.
-    - Change "Title" bar to "Premise" or "Thesis" bar.
     - Deeper indentation for sub-pro's and con's to make them more easily distinguishable.
-* Hyperlink button works but only if you click the "x" at the top right when finished. If you click the "save" link at the bottom of the edit page, the hyperlink does not take effect. Perhaps put a "save" or "ok" button on the hyperlink editor to reduce confusion.
-* make truthfinder.org point to the app
 * mass-pin button
