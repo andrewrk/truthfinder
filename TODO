@@ -1,5 +1,4 @@
 Features:
- * show old title in changelist edited
  * Changlist timestamps are not in my timezone
  * if you add pro/con/premise in inverted mode, it's wrong
  * bad behavior if you pin an existing premise

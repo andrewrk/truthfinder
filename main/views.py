@@ -188,10 +188,6 @@ def edit_node(request, node_id):
     if request.method == 'POST':
         form = CreateNodeForm(request.POST)
         if form.is_valid():
-            node.title = form.cleaned_data.get('title')
-            node.content = form.cleaned_data.get('content')
-            node.save()
-
             change = ChangeNotification()
             change.change_type = ChangeNotification.EDIT
             change.user = users.get_current_user().nickname()
@@ -199,6 +195,9 @@ def edit_node(request, node_id):
             change.node_title = node.title
             change.save()
 
+            node.title = form.cleaned_data.get('title')
+            node.content = form.cleaned_data.get('content')
+            node.save()
 
             return HttpResponseRedirect(reverse('node', args=[node.id]))
     else:
