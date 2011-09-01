@@ -62,8 +62,6 @@ TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
 
 ROOT_URLCONF = 'urls'
 
-USE_L10N = True
-
 try:
     if os.environ['SERVER_SOFTWARE'].startswith('Development'):
         from localsettings import *
