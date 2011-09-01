@@ -312,6 +312,10 @@ def pin_node(request, node_id):
 @login_required
 def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
+    parent_rels = NodeRelationship.objects.filter(child_node__pk=node.pk)
+    child_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
+    rel_types = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+
     if request.method == 'POST':
         change = ChangeNotification()
         change.change_type = ChangeNotification.DELETE
@@ -319,13 +323,13 @@ def delete_node(request, node_id):
         change.node_title = node.title
         change.save()
 
-        NodeRelationship.objects.filter(parent_node__pk=node.pk).delete()
-        NodeRelationship.objects.filter(child_node__pk=node.pk).delete()
+        parent_rels.delete()
+        child_rels.delete()
         node.delete()
 
         return HttpResponseRedirect(reverse('home'))
     else:
-        return render_to_response('delete.html', {'node': node}, 
+        return render_to_response('delete.html', locals(), 
             context_instance=RequestContext(request))
 
 def add_arg(request, node_id, arg_type):

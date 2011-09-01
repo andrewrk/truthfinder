@@ -1,12 +1,41 @@
 {% extends 'base.html' %}
 
+{% load hash_filter %}
+
 {% block title %}Deleting node - {{ block.super }}{% endblock %}
 
 {% block content %} 
   <h1>Deleting node</h1>
   <p>
-    Are you sure you want to delete <em>{{ node.title }}</em>
+    You are about to:
   </p>
+  <ul>
+    <li>delete <em>{{ node.title }}</em>.</li>
+    {% if parent_rels %}
+      <li>
+        unpin from all parents:
+        <ul>
+          {% for parent_rel in parent_rels %}
+            <li>
+              <strong>{{ parent_rel.relationship|hash:rel_types }}</strong> for <em>{{ parent_rel.parent_node.title }}</em>
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+    {% if child_rels %}
+      <li>
+        unpin all children:
+        <ul>
+          {% for child_rel in child_rels %}
+            <li>
+              <em>{{ child_rel.child_node.title }}</em> (<strong>{{ child_rel.relationship|hash:rel_types }}</strong>)
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  </ul>
   <form action="." method="post">
     <input type="submit" value="Delete it" />
   </form>
