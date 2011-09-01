@@ -100,6 +100,7 @@ def cron_orphans(request):
             rel.child_node = node
             rel.parent_node = TruthNode.objects.get(pk=settings.ORPHANS_ID)
             rel.relationship = NodeRelationship.PRO
+            rel.createDiscussionNode()
             rel.save()
 
     return json_response({"success": True})
@@ -166,6 +167,7 @@ def add_node(request):
             rel.parent_node = TruthNode.objects.get(pk=settings.HOME_PAGE_ID)
             rel.child_node = node
             rel.relationship = NodeRelationship.PRO
+            rel.createDiscussionNode()
             rel.save()
 
             change = ChangeNotification()
@@ -259,6 +261,7 @@ def pin_existing(request, node_id, relationship_type):
             relate.child_node = form.cleaned_data.get('child_node')
             relate.relationship = form.cleaned_data.get('relationship')
             relate.invert_child = form.cleaned_data.get('invert_child')
+            relate.createDiscussionNode()
             relate.save()
 
             change = ChangeNotification()
@@ -291,6 +294,7 @@ def pin_node(request, node_id):
             relate.child_node = form.cleaned_data.get('child_node')
             relate.relationship = form.cleaned_data.get('relationship')
             relate.invert_child = form.cleaned_data.get('invert_child')
+            relate.createDiscussionNode()
             relate.save()
 
             change = ChangeNotification()
@@ -346,6 +350,7 @@ def add_arg(request, node_id, arg_type):
             relate.parent_node = parent
             relate.child_node = node
             relate.relationship = arg_type
+            relate.createDiscussionNode()
             relate.save()
 
             change = ChangeNotification()

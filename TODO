@@ -1,18 +1,20 @@
 Features:
+ * ability to link to a node in text
+
+ * orphan status should be determined when things are deleted, pinned, or unpinned, so that there never has to be a cron job to compute it.
+ * better search
  * ability to give a justification for a change
+ * organize top-level nodes somehow
 
  * cron job to changelist items when there are more than a certain number
- * orphan status should be determined when things are deleted, pinned, or unpinned, so that there never has to be a cron job to compute it.
  * backup system
 
- * ability to flag and comment on pins
- * ability to link to a node in text
- * better search
+ * "repin" button - just does an unpin and pin simultaneously
+ * more integrated flagging support
 
  * wiki / remember node history  / support rollback
    - same with pins
 
- * organize top-level nodes somehow
  * sort nodes according to some heuristic
  * ability to fork and merge nodes
  * external links should be flagged or opened in new tabs
@@ -26,3 +28,9 @@ Features:
    - bullet points show up double
  * warning popup if you're editing and leave the page
  * mass-pin button
+
+ * community stuff
+   - more safety; don't let trolls ruin the site
+   - polish up community guidelines
+   - think about how to encourage good behavior
+   - ability to ban users / roll back edits

@@ -8,6 +8,9 @@
   {% if node_rel %}
     <a href="{% url unpin node_rel.id %}">Unpin</a>
     <a href="{% url invert node_rel.id %}">Invert</a>
+    {% if node_rel.discussion_node %}
+      <a href="{% url node node_rel.discussion_node.id %}">Discuss</a>
+    {% endif %}
   {% endif %}
   {% if parent_rels %}
     Parents: 
