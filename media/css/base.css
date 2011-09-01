@@ -136,10 +136,10 @@ table.changelist .date {
     width: 200px;
 }
 
-.inverted > h2 > a {
+.inverted > .node-header > h2 > a {
     background: url(/media/img/invert.png) no-repeat;
-    background-position: 0 4px;
-    padding-left: 18px;
+    background-position: 10px 12px;
+    padding-left: 28px;
 }
 
 .html-content {
