@@ -1,10 +1,9 @@
 Features:
- * clicking "invert" goes to a page that says "Unpinning claim"
+ * not icon is busted
  * show old title in changelist edited
  * Changlist timestamps are not in my timezone
  * if you add pro/con/premise in inverted mode, it's wrong
  * bad behavior if you pin an existing premise
- * not icon is busted
  * list all relationships on the delete confirmation page
 
  * ability to give a justification for a change
