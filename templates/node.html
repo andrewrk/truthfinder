@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load hash_filter %}
 
-{% block title %}{{ node.title }} - {{ block.super }}{% endblock %}
+{% block title %}{{ node.title|expand_node_titles }} - {{ block.super }}{% endblock %}
 
 {% block content %}
   <div class="node" data-master="1">
-    <h1>{{ node.title }}</h1>
+    <h1>{{ node.title|expand_node_links }}</h1>
     <div class="node-content">
       {% include 'node_content.html' %}
     </div>

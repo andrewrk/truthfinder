@@ -1,6 +1,4 @@
 Features:
- * ability to link to a node in text
-
  * orphan status should be determined when things are deleted, pinned, or unpinned, so that there never has to be a cron job to compute it.
  * better search
  * ability to give a justification for a change

@@ -15,7 +15,7 @@
   {% if parent_rels %}
     Parents: 
     {% for parent_rel in parent_rels %}
-      <a href="{% url node parent_rel.parent_node.id %}">{{ parent_rel.parent_node.title }} ({% if parent_rel.invert_child %}Inverted {% endif %}{{ parent_rel.relationship|hash:relationship_choices }})</a>
+      <a href="{% url node parent_rel.parent_node.id %}">{{ parent_rel.parent_node.title|expand_node_titles }} ({% if parent_rel.invert_child %}Inverted {% endif %}{{ parent_rel.relationship|hash:relationship_choices }})</a>
     {% endfor %}
   {% endif %}
 </div>
@@ -39,7 +39,7 @@
 {% if node.content %}
   <h3>Explanation</h3>
   <div class="html-content">
-    {{ node.content|safe }}
+    {{ node.content|expand_node_links|safe }}
   </div>
 {% endif %}
 <div class="pro">

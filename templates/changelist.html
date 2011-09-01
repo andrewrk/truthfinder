@@ -34,7 +34,7 @@
               {% include 'changelist_node.html' %}.
             {% endif %}{% if change.change_type == 3 %}
               deleted
-              <em>{{ change.node_title }}</em>
+              <em>{{ change.node_title|expand_node_links }}</em>
             {% endif %}{% if change.change_type == 4 %}
               edited
               {% include 'changelist_node.html' %}.

@@ -8,11 +8,11 @@
   <h1>Inverting claim</h1>
   <p>
     {% if rel.invert_child %}<strong>Not (</strong>{% endif %}
-    <em>{{ rel.child_node.title }}</em>
+    <em>{{ rel.child_node.title|expand_node_links }}</em>
     {% if rel.invert_child %}<strong>)</strong>{% endif %}
     is a
     <strong>{{ rel.relationship|hash:rel_choices }}</strong> of
-    <em>{{ rel.parent_node.title }}</em>.
+    <em>{{ rel.parent_node.title|expand_node_links }}</em>.
   </p>
   <form action="." method="post">
     <input type="submit" value="Invert it" />

@@ -7,9 +7,9 @@
 {% block content %} 
   <h1>Unpinning claim</h1>
   <p>
-    <em>{{ relationship.child_node.title }}</em> is a
+    <em>{{ relationship.child_node.title|expand_node_links }}</em> is a
     <strong>{{ relationship.relationship|hash:relationship_choices }}</strong> of
-    <em>{{ relationship.parent_node.title }}</em>.
+    <em>{{ relationship.parent_node.title|expand_node_links }}</em>.
   </p>
   <form action="." method="post">
     <input type="submit" value="Unpin it" />

@@ -1,5 +1,7 @@
+{% load hash_filter %}
+
 {% if change.node.id %}
-<em><a href="{% url node change.node.id %}">{{ change.node_title }}</a></em>
+<em><a href="{% url node change.node.id %}">{{ change.node_title|expand_node_titles }}</a></em>
 {% else %}
-<em>{{ change.node_title }}</em>
+<em>{{ change.node_title|expand_node_links }}</em>
 {% endif %}

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load hash_filter %}
+
 {% block title %}Pinning Claim - {{ block.super }}{% endblock %}
 
 {% block content %} 
@@ -40,7 +42,7 @@
         </td>
         <td>
           <em>{{ form.parent_node.errors }}</em>
-          <em>{{ parent_node.title }}</em>
+          <em>{{ parent_node.title|expand_node_links }}</em>
           <input type="hidden" name="parent_node" value="{{ parent_node.id }}" />
         </td>
       </tr>

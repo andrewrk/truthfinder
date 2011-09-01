@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load hash_filter %}
+
 {% block title %}Pinning claim - {{ block.super }}{% endblock %}
 
 {% block content %} 
@@ -12,7 +14,7 @@
           This claim:
         </td>
         <td>
-          <em>{{ child_node.title }}</em>
+          <em>{{ child_node.title|expand_node_links }}</em>
           <input type="hidden" name="child_node" value="{{ child_node.id }}" />
         </td>
       </tr>
