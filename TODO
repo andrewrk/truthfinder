@@ -1,12 +1,13 @@
 Features:
- * Changlist timestamps are not in my timezone
- * if you add pro/con/premise in inverted mode, it's wrong
  * bad behavior if you pin an existing premise
  * list all relationships on the delete confirmation page
 
  * ability to give a justification for a change
 
+ * cron job to changelist items when there are more than a certain number
+ * orphan status should be determined when things are deleted, pinned, or unpinned, so that there never has to be a cron job to compute it.
  * backup system
+
  * ability to flag and comment on pins
  * ability to link to a node in text
  * better search

@@ -52,8 +52,8 @@
   {% endif %}
   <div class="add">
     Add Pro Argument:
-    <a href="{% url pro node.id %}" class="add">Create New</a>
-    <a href="{% url pin_existing node.id 0 %}" class="add">Pin Existing</a>
+    <a href="{% if node_rel.invert_child %}{% url con node.id %}{% else %}{% url pro node.id %}{% endif %}" class="add">Create New</a>
+    <a href="{% if node_rel.invert_child %}{% url pin_existing node.id 1 %}{% else %}{% url pin_existing node.id 0 %}{% endif %}" class="add">Pin Existing</a>
   </div>
 </div>
 <div class="con">
@@ -69,8 +69,8 @@
   {% endif %}
   <div class="add">
     Add Con Argument:
-    <a href="{% url con node.id %}" class="add">Create New</a>
-    <a href="{% url pin_existing node.id 1 %}" class="add">Pin Existing</a>
+    <a href="{% if node_rel.invert_child %}{% url pro node.id %}{% else %}{% url con node.id %}{% endif %}" class="add">Create New</a>
+    <a href="{% if node_rel.invert_child %}{% url pin_existing node.id 0 %}{% else %}{% url pin_existing node.id 1 %}{% endif %}" class="add">Pin Existing</a>
   </div>
 </div>
 
