@@ -11,7 +11,7 @@
       {% for change in changes.object_list %}
         <tr>
           <td class="date">
-            {{ change.date }}
+            {{ change.date|date:"F d, Y H:i:s" }}
           </td>
           <td>
             {{ change.user }}

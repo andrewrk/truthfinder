@@ -49,7 +49,37 @@ function parseForNodeSearch(dom) {
     });
 }
 
+function convertDatesToLocalTime(dom) {
+    var month_abbr = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+    ];
+
+    function prettyFormatDateTime(date) {
+        return month_abbr[date.getMonth()] + " " + date.getDate() + ", " +
+            date.getFullYear() + " " + date.toLocaleTimeString();
+    }
+
+    $(dom).find('.date').each(function(index, item) {
+        // attempt to read the date into a JavaScript date object
+        var date = new Date($.trim($(item).text()));
+        date.setMinutes(date.getMinutes() - (new Date()).getTimezoneOffset());
+        $(item).html(prettyFormatDateTime(date));
+    });
+}
+
 $(document).ready(function() {
     parseForDropdowns(document);
     parseForNodeSearch(document);
+    convertDatesToLocalTime(document);
 });
