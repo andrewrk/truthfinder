@@ -74,6 +74,8 @@ class CreateNodeForm(forms.ModelForm):
             attributes=allowed_attrs, styles=allowed_styles)
 
 class NodeRelationshipForm(forms.ModelForm):
+    _missing_field = 'parent_node'
+
     class Meta:
         model = NodeRelationship
 
@@ -83,6 +85,9 @@ class NodeRelationshipForm(forms.ModelForm):
         relationship = self.cleaned_data['relationship']
 
         if NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node, relationship=relationship).count() > 0:
-            self._errors['parent_node'] = self.error_class(["This relationship already exists."])
+            self._errors[self._missing_field] = self.error_class(["This relationship already exists."])
 
         return self.cleaned_data
+
+class NodeRelationshipFormMissingChild(NodeRelationshipForm):
+    _missing_field = 'child_node'

@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 
 from main.models import TruthNode, NodeRelationship, ChangeNotification
-from main.forms import CreateNodeForm, NodeRelationshipForm
+from main.forms import CreateNodeForm, NodeRelationshipForm, NodeRelationshipFormMissingChild
 
 import simplejson as json
 
@@ -252,7 +252,7 @@ def pin_existing(request, node_id, relationship_type):
     relationship_type = int(relationship_type)
 
     if request.method == 'POST':
-        form = NodeRelationshipForm(request.POST)
+        form = NodeRelationshipFormMissingChild(request.POST)
         if form.is_valid():
             relate = NodeRelationship()
             relate.parent_node = form.cleaned_data.get('parent_node')

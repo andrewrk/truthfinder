@@ -39,6 +39,7 @@
           <label for="parent_node">Of:</label>
         </td>
         <td>
+          <em>{{ form.parent_node.errors }}</em>
           <em>{{ parent_node.title }}</em>
           <input type="hidden" name="parent_node" value="{{ parent_node.id }}" />
         </td>
