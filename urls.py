@@ -16,8 +16,6 @@ urlpatterns = patterns('',
     url(r'^ajax/node/(\d+)/$', 'main.views.ajax_node', name='ajax_node'),
     url(r'^ajax/search/$', 'main.views.ajax_search', name='ajax_search'),
 
-    url(r'^cron/orphans/$', 'main.views.cron_orphans', name='cron_orphans'),
-
     url(r'^changelist/$', 'main.views.changelist', name='changelist'),
     url(r'^add/$', 'main.views.add_node', name='add'),
     url(r'^unpin/(\d+)/$', 'main.views.unpin_node', name='unpin'),

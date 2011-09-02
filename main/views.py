@@ -19,6 +19,87 @@ ok_emails = set([
     'suraphael@gmail.com',
 ])
 
+node_relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+
+def createDiscussionNode(relationship):
+    "don't forget to save() after calling this!"
+    try:
+        if relationship.discussion_node is not None:
+            # link is OK, don't duplicate.
+            return
+    except TruthNode.DoesNotExist:
+        # link to discussion is broken. fix below
+        pass
+
+    invert_text = {True: "n inverted", False: ""}
+    node_title = "[[node %i]] should be a%s %s of [[node %i]]" % (relationship.child_node.id, invert_text[relationship.invert_child], node_relationship_choices[relationship.relationship], relationship.parent_node.id)
+
+    # if the title already exists, declare that our discussion node.
+    nodes = TruthNode.objects.filter(title=node_title)
+    if nodes.count() == 0:
+        node = TruthNode()
+        node.title = node_title
+        node.save()
+    else:
+        node = nodes[0]
+        # unpin node from discussion orphans
+        NodeRelationship.objects.filter(parent_node__pk=settings.DISCUSSION_ORPHANS_ID, child_node__pk=node.pk).delete()
+
+    relationship.discussion_node = node
+
+def createRelationship(child, parent, rel_type=NodeRelationship.PRO, invert=False, discuss=True):
+    # if the parent is not the orphanage, unpin from orphans
+    if parent.pk != settings.ORPHANS_ID and parent.pk != settings.DISCUSSION_ORPHANS_ID:
+        NodeRelationship.objects.filter(parent_node__pk=settings.ORPHANS_ID, child_node__pk=child.pk).delete()
+        NodeRelationship.objects.filter(parent_node__pk=settings.DISCUSSION_ORPHANS_ID, child_node__pk=child.pk).delete()
+
+    rel = NodeRelationship()
+    rel.child_node = child
+    rel.parent_node = parent
+    rel.relationship = rel_type
+    rel.invert_child = invert
+    if discuss:
+        createDiscussionNode(rel)
+    rel.save()
+    return rel
+
+def deleteRelationship(relationship):
+    # move the discussion node to orphans
+    if relationship.discussion_node is not None:
+        createRelationship(relationship.discussion_node, TruthNode.objects.get(pk=settings.DISCUSSION_ORPHANS_ID), discuss=False)
+
+    # if the child has no more parents, orphan it
+    if NodeRelationship.objects.filter(child_node__pk=relationship.child_node.pk).count() == 1:
+        createRelationship(relationship.child_node, TruthNode.objects.get(pk=settings.ORPHANS_ID), discuss=False)
+    
+    # be gone
+    relationship.delete()
+
+def deleteRelationships(relationships):
+    for rel in relationships:
+        deleteRelationship(rel)
+
+def deleteNode(node, parent_rels=None, child_rels=None):
+    # parent relationships gotta go
+    if parent_rels is None:
+        parent_rels = NodeRelationship.objects.filter(child_node__pk=node.pk)
+    deleteRelationships(parent_rels)
+
+    # children relationships gotta go
+    if child_rels is None:
+        child_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
+    deleteRelationships(child_rels)
+
+    # if it's a discussion node the rel needs to be marked as not having one
+    for rel in NodeRelationship.objects.filter(discussion_node__pk=node.pk):
+        rel.discussion_node = None
+        rel.save()
+
+    # run again in case code pinned it to a meta node
+    NodeRelationship.objects.filter(child_node__pk=node.pk).delete()
+    NodeRelationship.objects.filter(parent_node__pk=node.pk).delete()
+    node.delete()
+
 def admin_required(function):
     def decorated(*args, **kwargs):
         if users.is_current_user_admin():
@@ -66,7 +147,7 @@ def changelist(request):
         changes = paginator.page(paginator.num_pages)
     
     context = {
-        'pin_type_names': dict(NodeRelationship.RELATIONSHIP_CHOICES),
+        'pin_type_names': node_relationship_choices,
         'changes': changes,
     }
     return render_to_response('changelist.html', context, 
@@ -84,26 +165,12 @@ def common_node(request, node_id):
 
     return {
         'node': node,
-        'relationship_choices': dict(NodeRelationship.RELATIONSHIP_CHOICES),
+        'relationship_choices': node_relationship_choices,
         'parent_rels': parent_rels,
         'pro_rels': pro_rels,
         'con_rels': con_rels,
         'premise_rels': premise_rels,
     }
-
-@admin_required
-def cron_orphans(request):
-    for node in TruthNode.objects.all():
-        if NodeRelationship.objects.filter(child_node__pk=node.pk).count() == 0:
-            # this is an orphan. pin it to orphans.
-            rel = NodeRelationship()
-            rel.child_node = node
-            rel.parent_node = TruthNode.objects.get(pk=settings.ORPHANS_ID)
-            rel.relationship = NodeRelationship.PRO
-            rel.createDiscussionNode()
-            rel.save()
-
-    return json_response({"success": True})
 
 def json_response(data):
     return HttpResponse(json.dumps(data), mimetype="text/plain")
@@ -163,12 +230,7 @@ def add_node(request):
             node.content = form.cleaned_data.get('content')
             node.save()
 
-            rel = NodeRelationship()
-            rel.parent_node = TruthNode.objects.get(pk=settings.HOME_PAGE_ID)
-            rel.child_node = node
-            rel.relationship = NodeRelationship.PRO
-            rel.createDiscussionNode()
-            rel.save()
+            createRelationship(child=node, parent=TruthNode.objects.get(pk=settings.ORPHANS_ID), rel_type=NodeRelationship.PRO, discuss=False)
 
             change = ChangeNotification()
             change.change_type = ChangeNotification.CREATE
@@ -214,7 +276,7 @@ def edit_node(request, node_id):
 @login_required
 def invert(request, rel_id):
     rel = get_object_or_404(NodeRelationship, pk=int(rel_id))
-    rel_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+    rel_choices = node_relationship_choices
 
     if request.method == 'POST':
         rel.invert_child = not rel.invert_child
@@ -228,7 +290,6 @@ def invert(request, rel_id):
 @login_required
 def unpin_node(request, node_rel_id):
     relationship = get_object_or_404(NodeRelationship, pk=int(node_rel_id))
-    relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
 
     if request.method == 'POST':
         change = ChangeNotification()
@@ -241,11 +302,15 @@ def unpin_node(request, node_rel_id):
         change.parent_node_title = relationship.parent_node.title
         change.save()
 
-        relationship.delete()
+        deleteRelationship(relationship)
 
         return HttpResponseRedirect(reverse('node', args=[relationship.parent_node.id]))
     else:
-        return render_to_response('unpin.html', locals(),
+        context = {
+            'relationship': relationship,
+            'relationship_choices': node_relationship_choices,
+        }
+        return render_to_response('unpin.html', context,
             context_instance=RequestContext(request))
     
 @login_required
@@ -256,13 +321,9 @@ def pin_existing(request, node_id, relationship_type):
     if request.method == 'POST':
         form = NodeRelationshipFormMissingChild(request.POST)
         if form.is_valid():
-            relate = NodeRelationship()
-            relate.parent_node = form.cleaned_data.get('parent_node')
-            relate.child_node = form.cleaned_data.get('child_node')
-            relate.relationship = form.cleaned_data.get('relationship')
-            relate.invert_child = form.cleaned_data.get('invert_child')
-            relate.createDiscussionNode()
-            relate.save()
+            relate = createRelationship(form.cleaned_data.get('child_node'),
+                form.cleaned_data.get('parent_node'), form.cleaned_data.get('relationship'),
+                form.cleaned_data.get('invert_child'))
 
             change = ChangeNotification()
             change.change_type = ChangeNotification.PIN
@@ -289,13 +350,11 @@ def pin_node(request, node_id):
     if request.method == 'POST':
         form = NodeRelationshipForm(request.POST)
         if form.is_valid():
-            relate = NodeRelationship()
-            relate.parent_node = form.cleaned_data.get('parent_node')
-            relate.child_node = form.cleaned_data.get('child_node')
-            relate.relationship = form.cleaned_data.get('relationship')
-            relate.invert_child = form.cleaned_data.get('invert_child')
-            relate.createDiscussionNode()
-            relate.save()
+            relate = createRelationship(
+                form.cleaned_data.get('child_node'),
+                form.cleaned_data.get('parent_node'),
+                form.cleaned_data.get('relationship'),
+                form.cleaned_data.get('invert_child'))
 
             change = ChangeNotification()
             change.change_type = ChangeNotification.PIN
@@ -318,7 +377,7 @@ def delete_node(request, node_id):
     node = get_object_or_404(TruthNode, pk=int(node_id))
     parent_rels = NodeRelationship.objects.filter(child_node__pk=node.pk)
     child_rels = NodeRelationship.objects.filter(parent_node__pk=node.pk)
-    rel_types = dict(NodeRelationship.RELATIONSHIP_CHOICES)
+    rel_types = node_relationship_choices
 
     if request.method == 'POST':
         change = ChangeNotification()
@@ -327,9 +386,7 @@ def delete_node(request, node_id):
         change.node_title = node.title
         change.save()
 
-        parent_rels.delete()
-        child_rels.delete()
-        node.delete()
+        deleteNode(node, parent_rels=parent_rels, child_rels=child_rels)
 
         return HttpResponseRedirect(reverse('home'))
     else:
@@ -346,12 +403,7 @@ def add_arg(request, node_id, arg_type):
             node.content = form.cleaned_data.get('content')
             node.save()
 
-            relate = NodeRelationship()
-            relate.parent_node = parent
-            relate.child_node = node
-            relate.relationship = arg_type
-            relate.createDiscussionNode()
-            relate.save()
+            relate = createRelationship(node, parent, arg_type)
 
             change = ChangeNotification()
             change.change_type = ChangeNotification.ADD
@@ -371,7 +423,7 @@ def add_arg(request, node_id, arg_type):
     context = {
         'parent': parent,
         'arg_type': arg_type,
-        'arg_type_text': dict(NodeRelationship.RELATIONSHIP_CHOICES)[arg_type],
+        'arg_type_text': node_relationship_choices[arg_type],
         'form': form,
     }
     return render_to_response('arg.html', context,

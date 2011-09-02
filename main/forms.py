@@ -80,9 +80,9 @@ class NodeRelationshipForm(forms.ModelForm):
         model = NodeRelationship
 
     def clean(self):
-        parent_node = self.cleaned_data['parent_node']
-        child_node = self.cleaned_data['child_node']
-        relationship = self.cleaned_data['relationship']
+        parent_node = self.cleaned_data.get('parent_node')
+        child_node = self.cleaned_data.get('child_node')
+        relationship = self.cleaned_data.get('relationship')
 
         if NodeRelationship.objects.filter(parent_node=parent_node, child_node=child_node, relationship=relationship).count() > 0:
             self._errors[self._missing_field] = self.error_class(["This relationship already exists."])

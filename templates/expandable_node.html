@@ -2,12 +2,19 @@
 
 <div class="node{% if node_rel.invert_child %} inverted{% endif %}">
   <div class="node-header">
-    <h2><a
-      {% if node_rel %}
-        data-relid="{{ node_rel.id }}"
+    <h2>
+      {% if node %}
+        <a
+          {% if node_rel %}
+            data-relid="{{ node_rel.id }}"
+          {% endif %}
+          data-nodeid="{{ node.id }}"
+          href="{% url node node.id %}">{% if node_rel.invert_child %}<strong>Not (</strong>{% endif %}{{ node.title|expand_node_titles }}{% if node_rel.invert_child %}<strong>)</strong>{% endif %}
+        </a>
+      {% else %}
+        Error
       {% endif %}
-      data-nodeid="{{ node.id }}"
-      href="{% url node node.id %}">{% if node_rel.invert_child %}<strong>Not (</strong>{% endif %}{{ node.title|expand_node_titles }}{% if node_rel.invert_child %}<strong>)</strong>{% endif %}</a></h2>
+    </h2>
   </div>
   <div class="node-content" style="display: none;">
   </div>
