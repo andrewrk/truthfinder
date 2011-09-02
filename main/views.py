@@ -242,8 +242,11 @@ def ajax_rel_json(request, rel_id):
         'child': node_rel.child_node.pk,
         'relationship': node_rel.relationship,
         'invert_child': node_rel.invert_child,
-        'discussion_node': node_rel.discussion_node.pk,
+        'discussion_node': None,
     }
+    if node_rel.discussion_node is not None:
+        data['discussion_node'] = node_rel.discussion_node.pk,
+
     return json_response(data)
     
 
