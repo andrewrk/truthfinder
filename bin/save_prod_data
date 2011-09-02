@@ -37,11 +37,13 @@ while len(unfound_nodes) > 0 or len(unfound_rels) > 0:
     if len(unfound_nodes) > 0:
         node_id = unfound_nodes.pop()
 
+        log.write('\n-----------------\n')
+        log.write('request: %s\n' % (node_url % node_id))
         content = urllib2.urlopen(node_url % node_id).read()
+        log.write(content)
+
         fetched_node_count += 1
         node = json.loads(content)
-        log.write(content)
-        log.write('\n-----------------\n')
         saved_nodes[node_id] = node
         for rel in itertools.chain(node['parent_rels'], node['pro_rels'], node['con_rels'], node['premise_rels']):
             if rel not in saved_rels:
@@ -49,11 +51,13 @@ while len(unfound_nodes) > 0 or len(unfound_rels) > 0:
     elif len(unfound_rels) > 0:
         rel_id = unfound_rels.pop()
 
+        log.write('\n-----------------\n')
+        log.write('request: %s\n' % (rel_url % rel_id))
         content = urllib2.urlopen(rel_url % rel_id).read()
+        log.write(content)
+
         fetched_rel_count += 1
         rel = json.loads(content)
-        log.write(content)
-        log.write('\n-----------------\n')
         saved_rels[rel_id] = rel
 
         for node in (rel['parent'], rel['child'], rel['discussion_node']):
