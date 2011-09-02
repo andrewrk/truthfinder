@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+
+import simplejson as json
+import itertools
+from datetime import datetime
+
+def to_json(data):
+    def json_dthandler(obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%B %d, %Y %H:%M:%S')
+        else:
+            return None
+
+    return json.dumps(data, default=json_dthandler)
+
+
+# download the home page node
+HOME_PAGE_ID = 19023
+node_url = "http://www.truthfinder.org/ajax/node/%i/json/"
+rel_url = "http://www.truthfinder.org/ajax/rel/%i/json/"
+
+import urllib2
+
+unfound_nodes = set((HOME_PAGE_ID,))
+saved_nodes = {}
+
+unfound_rels = set()
+saved_rels = {}
+
+fetched_node_count = 0
+fetched_rel_count = 0
+log = open('log', 'w')
+log.write('\n=======================\n')
+while len(unfound_nodes) > 0 or len(unfound_rels) > 0:
+    print("nodes: %i / %i, rels: %i / %i" % (fetched_node_count, fetched_node_count + len(unfound_nodes), fetched_rel_count, fetched_rel_count + len(unfound_rels)))
+
+    if len(unfound_nodes) > 0:
+        node_id = unfound_nodes.pop()
+
+        content = urllib2.urlopen(node_url % node_id).read()
+        fetched_node_count += 1
+        node = json.loads(content)
+        log.write(content)
+        log.write('\n-----------------\n')
+        saved_nodes[node_id] = node
+        for rel in itertools.chain(node['parent_rels'], node['pro_rels'], node['con_rels'], node['premise_rels']):
+            if rel not in saved_rels:
+                unfound_rels.add(rel)
+    elif len(unfound_rels) > 0:
+        rel_id = unfound_rels.pop()
+
+        content = urllib2.urlopen(rel_url % rel_id).read()
+        fetched_rel_count += 1
+        rel = json.loads(content)
+        log.write(content)
+        log.write('\n-----------------\n')
+        saved_rels[rel_id] = rel
+
+        for node in (rel['parent'], rel['child'], rel['discussion_node']):
+            if node is not None and node not in saved_nodes:
+                unfound_nodes.add(node)
+
+
+open("data.json", 'w').write(to_json({'nodes': saved_nodes, 'rels': saved_rels}))
+print("backed up prod data to data.json")
