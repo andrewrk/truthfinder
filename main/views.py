@@ -164,13 +164,18 @@ def common_node(request, node_id):
     con_rels = children_rels.filter(relationship=NodeRelationship.CON)
     premise_rels = children_rels.filter(relationship=NodeRelationship.PREMISE)
 
+    def child_title(rel):
+        return rel.child_node.title.lower()
+    def parent_title(rel):
+        return rel.parent_node.title.lower()
+
     return {
         'node': node,
         'relationship_choices': node_relationship_choices,
-        'parent_rels': parent_rels,
-        'pro_rels': pro_rels,
-        'con_rels': con_rels,
-        'premise_rels': premise_rels,
+        'parent_rels': sorted(parent_rels, key=parent_title),
+        'pro_rels': sorted(pro_rels, key=child_title),
+        'con_rels': sorted(con_rels, key=child_title),
+        'premise_rels': sorted(premise_rels, key=child_title),
     }
 
 def json_response(data):
