@@ -11,6 +11,7 @@ from main.models import TruthNode, NodeRelationship, ChangeNotification
 from main.forms import CreateNodeForm, NodeRelationshipForm, NodeRelationshipFormMissingChild
 
 import simplejson as json
+from datetime import datetime
 
 ok_emails = set([
     'superjoe30@gmail.com',
@@ -106,7 +107,13 @@ def cron_orphans(request):
     return json_response({"success": True})
 
 def json_response(data):
-    return HttpResponse(json.dumps(data), mimetype="text/plain")
+    def json_dthandler(obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%B %d, %Y %H:%M:%S')
+        else:
+            return None
+
+    return HttpResponse(json.dumps(data, default=json_dthandler), mimetype="text/plain")
 
 def ajax_search(request):
     query = request.GET.get('term')
@@ -143,6 +150,35 @@ def ajax_node(request, node_id):
     context = common_node(request, node_id)
     return render_to_response('node_content.html', context, 
         context_instance=RequestContext(request))
+
+def ajax_node_json(request, node_id):
+    data = common_node(request, node_id)
+    del data['relationship_choices']
+    node = data['node']
+    data['node'] = {
+        'title': node.title,
+        'content': node.content,
+        'create_date': node.create_date,
+        'edit_date': node.edit_date,
+    }
+    rid = lambda rels: [r.pk for r in rels]
+    data['parent_rels'] = rid(data['parent_rels'])
+    data['pro_rels'] = rid(data['pro_rels'])
+    data['con_rels'] = rid(data['con_rels'])
+    data['premise_rels'] = rid(data['premise_rels'])
+    return json_response(data)
+
+def ajax_rel_json(request, rel_id):
+    node_rel = get_object_or_404(NodeRelationship, pk=int(rel_id))
+    data = {
+        'parent': node_rel.parent_node.pk,
+        'child': node_rel.child_node.pk,
+        'relationship': node_rel.relationship,
+        'invert_child': node_rel.invert_child,
+        'discussion_node': node_rel.discussion_node.pk,
+    }
+    return json_response(data)
+    
 
 def node(request, node_id):
     # redirect to home page if home page is requested

@@ -13,7 +13,9 @@ urlpatterns = patterns('',
     url(r'^search/$', direct_to_template, {'template': 'search.html'}, name='search'),
 
     url(r'^ajax/rel/(\d+)/$', 'main.views.ajax_rel', name='ajax_rel'),
+    url(r'^ajax/rel/(\d+)/json/$', 'main.views.ajax_rel_json', name='ajax_rel_json'),
     url(r'^ajax/node/(\d+)/$', 'main.views.ajax_node', name='ajax_node'),
+    url(r'^ajax/node/(\d+)/json/$', 'main.views.ajax_node_json', name='ajax_node_json'),
     url(r'^ajax/search/$', 'main.views.ajax_search', name='ajax_search'),
 
     url(r'^cron/orphans/$', 'main.views.cron_orphans', name='cron_orphans'),
