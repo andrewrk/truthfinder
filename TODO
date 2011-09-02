@@ -1,6 +1,4 @@
 Features:
- * orphan status should be determined when things are deleted, pinned, or unpinned, so that there never has to be a cron job to compute it.
- * organize top-level nodes somehow
  * merge pin and pin_existing
  * submit empty values for pinning
  * get beta testers out of hard-codedness
@@ -10,8 +8,6 @@ Features:
 
  * on a node page, list the node's parents with options for unpinning and discusssing
 
- * cron job to changelist items when there are more than a certain number
- * backup system
 
  * "repin" button - just does an unpin and pin simultaneously
  * more integrated flagging support

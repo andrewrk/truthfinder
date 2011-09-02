@@ -10,6 +10,9 @@ FLAG_ID = 31013
 ORPHANS_ID = 18058
 DISCUSSION_ORPHANS_ID = 17363
 
+CHANGELIST_ITEMS_PER_PAGE = 40
+MAX_CHANGELIST_ITEMS = CHANGELIST_ITEMS_PER_PAGE * 20
+
 # Uncomment this if you're using the high-replication datastore.
 # TODO: Once App Engine fixes the "s~" prefix mess we can remove this.
 #DATABASES['default']['HIGH_REPLICATION'] = True

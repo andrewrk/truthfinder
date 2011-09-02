@@ -2,3 +2,7 @@ cron:
 - description: keep alive
   url: /
   schedule: every 2 minutes
+
+- description: delete old changelist entries
+  url: /cron/changelist/
+  schedule: every 24 hours

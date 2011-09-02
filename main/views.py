@@ -135,7 +135,7 @@ def flagged(request):
     return node_children(request, 'flagged.html', settings.FLAG_ID)
 
 def changelist(request):
-    paginator = Paginator(ChangeNotification.objects.order_by('-date'), 40)
+    paginator = Paginator(ChangeNotification.objects.order_by('-date'), settings.CHANGELIST_ITEMS_PER_PAGE)
 
     try:
         page = int(request.GET.get('page', '1'))
@@ -181,6 +181,19 @@ def json_response(data):
             return None
 
     return HttpResponse(json.dumps(data, default=json_dthandler), mimetype="text/plain")
+
+def cron_changelist(request):
+    success = {'success': True}
+    try:
+        pivot_change = ChangeNotification.objects.order_by('-date')[settings.MAX_CHANGELIST_ITEMS]
+    except IndexError:
+        # changelist is small enough
+        return json_response(success)
+    
+    ChangeNotification.objects.filter(date__lt=pivot_change.date).delete()
+
+    return json_response(success)
+
 
 def ajax_search(request):
     query = request.GET.get('term')

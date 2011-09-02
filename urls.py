@@ -12,6 +12,8 @@ urlpatterns = patterns('',
 
     url(r'^search/$', direct_to_template, {'template': 'search.html'}, name='search'),
 
+    url(r'^cron/changelist/$', 'main.views.cron_changelist', name='cron_changelist'),
+
     url(r'^ajax/rel/(\d+)/$', 'main.views.ajax_rel', name='ajax_rel'),
     url(r'^ajax/rel/(\d+)/json/$', 'main.views.ajax_rel_json', name='ajax_rel_json'),
     url(r'^ajax/node/(\d+)/$', 'main.views.ajax_node', name='ajax_node'),
