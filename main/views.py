@@ -245,7 +245,7 @@ def ajax_rel_json(request, rel_id):
         'discussion_node': None,
     }
     if node_rel.discussion_node is not None:
-        data['discussion_node'] = node_rel.discussion_node.pk,
+        data['discussion_node'] = node_rel.discussion_node.pk
 
     return json_response(data)
     
