@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e
-
-appcfg.py download_data --url=http://truthfindertest.appspot.com/_ah/remote_api --filename=data.sqlite3
-appcfg.py upload_data --url=http://localhost:8000/_ah/remote_api --filename=data.sqlite3
-rm data.sqlite3
