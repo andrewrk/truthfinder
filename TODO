@@ -1,7 +1,6 @@
 Features:
  * merge pin and pin_existing
  * submit empty values for pinning
- * get beta testers out of hard-codedness
 
  * better search
  * ability to give a justification for a change

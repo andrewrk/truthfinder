@@ -65,3 +65,13 @@ class ChangeNotification(models.Model):
     parent_node_title = models.CharField(max_length=200, blank=True, null=True)
     pin_type = models.IntegerField(choices=NodeRelationship.RELATIONSHIP_CHOICES, blank=True, null=True)
     
+class User(models.Model):
+    INACTIVE, ACTIVE, BANNED = range(3)
+    STATUS_CHOICES = (
+        (INACTIVE, 'Registered'),
+        (ACTIVE, 'Active'),
+        (BANNED, 'Banned'),
+    )
+    email = models.EmailField(db_index=True)
+    activate_code = models.CharField(max_length=100)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=INACTIVE)

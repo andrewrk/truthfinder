@@ -7,18 +7,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 
-from main.models import TruthNode, NodeRelationship, ChangeNotification
+from main.models import TruthNode, NodeRelationship, ChangeNotification, User
 from main.forms import CreateNodeForm, NodeRelationshipForm, NodeRelationshipFormMissingChild
 
 import simplejson as json
 from datetime import datetime
-
-ok_emails = set([
-    'superjoe30@gmail.com',
-    'tyler.heald@gmail.com',
-    'thejoshwolfe@gmail.com',
-    'suraphael@gmail.com',
-])
 
 node_relationship_choices = dict(NodeRelationship.RELATIONSHIP_CHOICES)
 
@@ -112,12 +105,16 @@ def admin_required(function):
 
 def login_required(function):
     def decorated(*args, **kwargs):
-        user = users.get_current_user() 
-        if user and user.email() in ok_emails:
-            return function(*args, **kwargs)
-        else:
-            request = args[0]
-            return HttpResponseRedirect(users.create_login_url(request.path))
+        google_user = users.get_current_user() 
+        if google_user:
+            try:
+                user = User.objects.get(email=google_user.email())
+                if user.status == User.ACTIVE:
+                    return function(*args, **kwargs)
+            except User.DoesNotExist:
+                pass
+        request = args[0]
+        return HttpResponseRedirect(users.create_login_url(request.path))
     return decorated
 
 def node_children(request, template, node_id):

@@ -11,3 +11,4 @@ Setting up a development environment:
     * Create a "Home Page" node and set HOME_PAGE_ID to the node ID in your
       local settings. 
     * Same for FLAG_ID and ORPHAN_ID
+    * Manually add users who have edit privileges to the User table
