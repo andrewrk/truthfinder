@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Claims</h2>
+  <h2>Debates</h2>
   {% if node_rels %}
     {% for node_rel in node_rels %}
       {% with node_rel.child_node as node %}
@@ -9,6 +9,6 @@
       {% endwith %}
     {% endfor %}
   {% else %}
-    <p>No claims here.</p>
+    <p>No debates here.</p>
   {% endif %}
 {% endblock %}
