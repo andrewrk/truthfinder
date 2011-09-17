@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}About {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>About TruthFinder</h1>
+  <h2>Mission Statement</h2>
+  <blockquote style="max-width: 400px; font-family: serif; font-size: 1.1em;">
+    The goal of <a href="/">truthfinder.org</a> is to provide a
+    platform where <em>all sides</em> of <em>any
+    debate</em> can be fully fleshed out in an <em>organized manner</em>,
+    so that any person
+    <strong>seeking the truth</strong> can get an <u>objective view</u>.
+  </blockquote>
+  <p>
+    There are currently {{ node_count }} claims and {{ rel_count }}
+    relationships in the database.
+  </p>
+  <h2>Private Beta</h2>
+  <p>
+    This website is currently in <u>private beta</u>. If you would like to be
+    granted edit privileges, you'll have to ask
+    <a href="mailto:superjoe30@gmail.com">superjoe30@gmail.com</a> for them.
+  </p>
+  <h2>Open Source</h2>
+  <p>
+    <a href="https://github.com/superjoe30/truthfinder">The source code</a>
+    hosted on <a href="https://github.com/">GitHub</a>.
+    It uses
+    <a href="http://www.allbuttonspressed.com/projects/django-nonrel">django-nonrel</a>
+    on <a href="http://code.google.com/appengine/">Google App Engine</a>.
+  </p>
+{% endblock %}

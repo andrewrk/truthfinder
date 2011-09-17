@@ -494,3 +494,9 @@ def add_con(request, node_id):
 @login_required
 def add_premise(request, node_id):
     return add_arg(request, node_id, NodeRelationship.PREMISE)
+
+def about(request):
+    node_count = TruthNode.objects.count()
+    rel_count = NodeRelationship.objects.count()
+    return render_to_response('about.html', locals(),
+        context_instance=RequestContext(request))

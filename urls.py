@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^$', 'main.views.home', name='home'),
     url(r'^orphans/$', 'main.views.orphans', name='orphans'),
     url(r'^flagged/$', 'main.views.flagged', name='flagged'),
+    url(r'^about/$', 'main.views.about', name='about'),
 
     url(r'^search/$', direct_to_template, {'template': 'search.html'}, name='search'),
 
